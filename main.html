@@ -6,9 +6,18 @@
     <link rel="stylesheet" href="styles/cavity.css" />
     <link rel="stylesheet" href="styles/user-control.css" />
     <link rel="stylesheet" href="styles/warehouse.css" />
-    <script src="main.js"></script>
+    <link rel="stylesheet" href="styles/popup.css" />
   </head>
   <body>
+    <div class="dark-overlay">
+      <div class="central-popup">
+        <div class="popup-text popup-title">LET'S PLAY</div>
+        <div class="popup-text">Number of holes</div>
+        <h1 class="counter-display">(..)</h1>
+        <button class="counter-minus">-</button>
+        <button class="counter-plus">+</button>
+      </div>
+    </div>
     <div class="logo">
       <img src="assets/logo.png" alt="logo" />
     </div>
@@ -82,5 +91,6 @@
         </p>
       </div>
     </div>
+    <script src="main.js"></script>
   </body>
 </html>
