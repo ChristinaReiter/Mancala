@@ -1,28 +1,51 @@
 body {
-    background-color: black;
-  }
+  background-color: black;
+}
 
- .title {
-  font-family: 'Georgia', sans-serif;
+.title {
+  font-family: "Georgia", sans-serif;
   color: whitesmoke;
   font-size: 40px;
   text-align: center;
   margin-bottom: 3px;
-  }
+}
 
-  .undertitle{
-    font-family: 'Georgia', sans-serif;
-    color: whitesmoke;
-    font-size: 15px;
-    text-align: center;
-    margin-top: 0px;
-  }
+.undertitle {
+  font-family: "Georgia", sans-serif;
+  color: whitesmoke;
+  font-size: 15px;
+  text-align: center;
+  margin-top: 0px;
+}
 
-  .iconCircle {
-    height: 25px;
-    width: 25px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display: list-item;
-  }
+.iconCircle {
+  height: 25px;
+  width: 25px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: list-item;
+}
 
+.logo {
+  width: 100%;
+  text-align: center;
+}
+
+.logo img {
+  height: 200px;
+}
+
+.gameboard {
+  width: 80%;
+  display: inline-block;
+}
+
+.user-controls {
+  width: 15%;
+  display: inline-block;
+  text-align: end;
+}
+
+.user-controls img {
+  height: 50px;
+}
