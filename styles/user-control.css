@@ -1,0 +1,13 @@
+.user-controls {
+  text-align: end;
+}
+
+.user-controls img {
+  height: 50px;
+  cursor: pointer;
+}
+
+.user-controls img:hover {
+  filter: invert(11%) sepia(46%) saturate(5694%) hue-rotate(352deg)
+    brightness(101%) contrast(91%);
+}

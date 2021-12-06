@@ -1,0 +1,28 @@
+body {
+  background-color: black;
+}
+
+.logo {
+  width: 100%;
+  text-align: center;
+}
+
+.logo img {
+  height: 200px;
+}
+
+.layout-wrapper {
+  display: grid;
+  grid-template-columns: 10fr 2fr;
+  padding: 50px;
+}
+
+.gameboard {
+  width: 850px;
+  height: 350px;
+  margin: 0 auto;
+  background: #826347;
+  border-radius: 36px;
+  display: grid;
+  grid-template-columns: 3fr 8fr 3fr;
+}
