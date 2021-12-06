@@ -51,12 +51,71 @@ body {
   grid-template-columns: 3fr 8fr 3fr;
 }
 
-.holes-container {
-  background-color: red;
+.warehouse-container {
+  padding-top: 20%;
+  text-align: center;
 }
 
-.warehouse-container {
-  background-color: green;
+.warehouse-score {
+  font-size: 32px;
+  line-height: 40px;
+  color: #433223;
+}
+
+.warehouse-score-right {
+  margin-top: 10%;
+}
+
+.warehouse-ui {
+  width: 70%;
+  height: 65%;
+  background: #b58960;
+  border-radius: 40px;
+  margin: 0 auto;
+  margin-top: 10%;
+}
+
+.warehouse-ui-left {
+  box-shadow: inset 9px 8px 12px 6px rgba(0, 0, 0, 0.49);
+}
+
+.warehouse-ui-right {
+  box-shadow: inset -9px 8px 12px 6px rgba(0, 0, 0, 0.49);
+}
+
+.cavity-container {
+  padding-top: 4%;
+  padding-bottom: 4%;
+}
+
+.cavity-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.cavity {
+  text-align: center;
+}
+
+.cavity-ui {
+  width: 109px;
+  height: 115px;
+  background: #b58960;
+  box-shadow: inset 9px 8px 12px 6px rgba(0, 0, 0, 0.49);
+  border-radius: 40px;
+  margin: 0 auto;
+}
+
+.cavity-score {
+  font-size: 20px;
+  line-height: 27px;
+  color: #433223;
+  padding: 5%;
+}
+
+.cavity-divider {
+  height: 1px;
+  background-color: #433223;
 }
 
 .user-controls {
