@@ -35,17 +35,40 @@ body {
   height: 200px;
 }
 
+.layout-wrapper {
+  display: grid;
+  grid-template-columns: 10fr 2fr;
+  padding: 50px;
+}
+
 .gameboard {
-  width: 80%;
-  display: inline-block;
+  width: 850px;
+  height: 350px;
+  margin: 0 auto;
+  background: #826347;
+  border-radius: 36px;
+  display: grid;
+  grid-template-columns: 3fr 8fr 3fr;
+}
+
+.holes-container {
+  background-color: red;
+}
+
+.warehouse-container {
+  background-color: green;
 }
 
 .user-controls {
-  width: 15%;
-  display: inline-block;
   text-align: end;
 }
 
 .user-controls img {
   height: 50px;
+  cursor: pointer;
+}
+
+.user-controls img:hover {
+  filter: invert(11%) sepia(46%) saturate(5694%) hue-rotate(352deg)
+    brightness(101%) contrast(91%);
 }
