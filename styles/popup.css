@@ -40,3 +40,13 @@
 .popup-title {
   font-weight: 700;
 }
+
+.number-of-holes-container {
+  display: grid;
+  grid-template-columns: 4fr 1fr 1fr 1fr;
+  padding: 10px;
+}
+
+.start-game-button {
+  margin-top: 20px;
+}

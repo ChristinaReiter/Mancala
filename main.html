@@ -9,19 +9,26 @@
     <link rel="stylesheet" href="styles/popup.css" />
   </head>
   <body>
+    <!-- popups + overlay, only shown on initial load and icon click -->
     <div class="dark-overlay">
       <div class="central-popup">
         <div class="popup-text popup-title">LET'S PLAY</div>
-        <div class="popup-text">Number of holes</div>
-        <h1 class="counter-display">(..)</h1>
-        <button class="counter-minus">-</button>
-        <button class="counter-plus">+</button>
+        <div class="number-of-holes-container">
+          <div class="popup-text">Number of holes</div>
+          <button class="number-of-holes-minus">-</button>
+          <h1 class="number-of-holes-display">(..)</h1>
+          <button class="number-of-holes-plus">+</button>
+        </div>
+        <button class="start-game-button">Start Game!</button>
       </div>
     </div>
+    <!-- logo -->
     <div class="logo">
       <img src="assets/logo.png" alt="logo" />
     </div>
+    <!-- gameboard & user control icons -->
     <div class="layout-wrapper">
+      <!-- gameboard -->
       <div class="gameboard">
         <div class="warehouse-container">
           <div class="warehouse-score"><span>5</span></div>
@@ -73,6 +80,7 @@
           </div>
         </div>
       </div>
+      <!-- user control icons -->
       <div class="user-controls">
         <p>
           <img src="assets/settings.png" alt="settings" />
@@ -91,6 +99,7 @@
         </p>
       </div>
     </div>
-    <script src="main.js"></script>
+    <!-- loading of js scripts -->
+    <script src="scripts/settings.js"></script>
   </body>
 </html>

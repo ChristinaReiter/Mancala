@@ -27,3 +27,7 @@ body {
   display: grid;
   grid-template-columns: 3fr 8fr 3fr;
 }
+
+button {
+  cursor: pointer;
+}
