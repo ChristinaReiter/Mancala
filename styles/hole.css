@@ -1,18 +1,18 @@
-.cavity-container {
+.hole-container {
   padding-top: 4%;
   padding-bottom: 4%;
 }
 
-.cavity-row {
+.hole-row {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
-.cavity {
+.hole {
   text-align: center;
 }
 
-.cavity-ui {
+.hole-ui {
   width: 109px;
   height: 115px;
   background: #b58960;
@@ -21,14 +21,14 @@
   margin: 0 auto;
 }
 
-.cavity-score {
+.hole-score {
   font-size: 20px;
   line-height: 27px;
   color: #433223;
   padding: 5%;
 }
 
-.cavity-divider {
+.hole-divider {
   height: 1px;
   background-color: #433223;
 }
