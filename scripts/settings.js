@@ -1,6 +1,6 @@
 // constants for settings
-const minNumberOfHoles = 1;
-const maxNumberOfHoles = 4;
+const minNumberOfHoles = 2;
+const maxNumberOfHoles = 8;
 
 // dom elements
 let numberOfHolesDisplayElem = document.querySelector(
@@ -20,14 +20,14 @@ updateNumberOfHoles();
 
 numberOfHolesPlusElem.addEventListener("click", () => {
   if (numberOfHoles < maxNumberOfHoles) {
-    numberOfHoles++;
+    numberOfHoles += 2;
     updateNumberOfHoles();
   }
 });
 
 numberOfHolesMinusElem.addEventListener("click", () => {
   if (numberOfHoles > minNumberOfHoles) {
-    numberOfHoles--;
+    numberOfHoles -= 2;
     updateNumberOfHoles();
   }
 });
@@ -40,33 +40,45 @@ function updateNumberOfHoles() {
 
 function generateHoles() {
   darkOverlayElem.setAttribute("style", "display: none;");
-  // remove existing holes from both rows
+  // remove existing holes from both rows, top row hole belong to opponent, bottom ones to controlling player
   holeRowTopElem.innerHTML = "";
   holeRowBottomElem.innerHTML = "";
 
-  // TODO add ids to the elements to be able to track the seeds they contain
-  // generate new holes
-  for (let i = 0; i < numberOfHoles; i++) {
-    let topHoleDiv = document.createElement("div");
+  // index marks smallest opponent hole index from which on all following indices belong to the opponent
+  const opponentsHoleIndex = numberOfHoles / 2;
+  // generate new player holes
+  for (let i = 0; i < opponentsHoleIndex; i++) {
     let bottomHoleDiv = document.createElement("div");
     let holeUiDiv = document.createElement("div");
     let holeScoreDiv = document.createElement("div");
 
-    topHoleDiv.className = "hole";
     bottomHoleDiv.className = "hole";
     holeUiDiv.className = "hole-ui";
     holeScoreDiv.className = "hole-score";
-    holeScoreDiv.innerHTML = 0;
+    holeScoreDiv.id = `hole-score-${i}`;
+    holeScoreDiv.innerHTML = i;
+
+    bottomHoleDiv.appendChild(holeScoreDiv);
+    bottomHoleDiv.appendChild(holeUiDiv);
+
+    holeRowBottomElem.appendChild(bottomHoleDiv);
+  }
+
+  // generate new opponent holes (decreasing because they go from right to left)
+  for (let i = numberOfHoles - 1; i >= opponentsHoleIndex; i--) {
+    let topHoleDiv = document.createElement("div");
+    let holeUiDiv = document.createElement("div");
+    let holeScoreDiv = document.createElement("div");
+
+    topHoleDiv.className = "hole";
+    holeUiDiv.className = "hole-ui";
+    holeScoreDiv.className = "hole-score";
+    holeScoreDiv.id = `hole-score-${i}`;
+    holeScoreDiv.innerHTML = i;
 
     topHoleDiv.appendChild(holeUiDiv);
     topHoleDiv.appendChild(holeScoreDiv);
 
-    bottomHoleDiv.appendChild(holeScoreDiv.cloneNode(true));
-    bottomHoleDiv.appendChild(holeUiDiv.cloneNode(true));
-
-    // top row
     holeRowTopElem.appendChild(topHoleDiv);
-    // bottom row
-    holeRowBottomElem.appendChild(bottomHoleDiv);
   }
 }
