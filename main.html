@@ -31,7 +31,7 @@
       <!-- gameboard -->
       <div class="gameboard">
         <div class="warehouse-container">
-          <div class="warehouse-score"><span>5</span></div>
+          <div id="warehouse-left" class="warehouse-score"><span>5</span></div>
           <div class="warehouse-ui warehouse-ui-left"></div>
         </div>
         <div class="hole-container">
@@ -75,7 +75,10 @@
         </div>
         <div class="warehouse-container">
           <div class="warehouse-ui warehouse-ui-right"></div>
-          <div class="warehouse-score warehouse-score-right">
+          <div
+            id="warehouse-right"
+            class="warehouse-score warehouse-score-right"
+          >
             <span>5</span>
           </div>
         </div>
@@ -100,6 +103,6 @@
       </div>
     </div>
     <!-- loading of js scripts -->
-    <script src="scripts/settings.js"></script>
+    <script type="module" src="scripts/settings.js"></script>
   </body>
 </html>

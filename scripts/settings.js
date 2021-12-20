@@ -1,3 +1,5 @@
+import GameLogic from "./game-logic.js";
+
 // constants for settings
 const minNumberOfHoles = 2;
 const maxNumberOfHoles = 8;
@@ -12,9 +14,14 @@ let startGameElem = document.querySelector(".start-game-button");
 let darkOverlayElem = document.querySelector(".dark-overlay");
 let holeRowTopElem = document.getElementById("hole-row-top");
 let holeRowBottomElem = document.getElementById("hole-row-bottom");
+let warehouseScoreLeft = document.getElementById("warehouse-left");
+let warehouseScoreRight = document.getElementById("warehouse-right");
 
 // settings variables
-let numberOfHoles = minNumberOfHoles;
+let numberOfHoles = maxNumberOfHoles;
+
+// game variables
+let currentGame;
 
 updateNumberOfHoles();
 
@@ -32,14 +39,21 @@ numberOfHolesMinusElem.addEventListener("click", () => {
   }
 });
 
-startGameElem.addEventListener("click", generateHoles);
+startGameElem.addEventListener("click", startOrResetGame);
 
 function updateNumberOfHoles() {
   numberOfHolesDisplayElem.innerHTML = numberOfHoles;
 }
 
-function generateHoles() {
+function startOrResetGame() {
   darkOverlayElem.setAttribute("style", "display: none;");
+  // TODO integrate multiplayer option
+  currentGame = new GameLogic(1, 0, numberOfHoles);
+
+  // set warehouse scores to 0
+  warehouseScoreLeft.innerHTML = 0;
+  warehouseScoreRight.innerHTML = 0;
+
   // remove existing holes from both rows, top row hole belong to opponent, bottom ones to controlling player
   holeRowTopElem.innerHTML = "";
   holeRowBottomElem.innerHTML = "";
@@ -53,10 +67,14 @@ function generateHoles() {
     let holeScoreDiv = document.createElement("div");
 
     bottomHoleDiv.className = "hole";
-    holeUiDiv.className = "hole-ui";
+    holeUiDiv.className = "hole-ui hole-ui-player";
     holeScoreDiv.className = "hole-score";
     holeScoreDiv.id = `hole-score-${i}`;
-    holeScoreDiv.innerHTML = i;
+    holeScoreDiv.innerHTML = currentGame.holes[i];
+    holeUiDiv.addEventListener("click", () => {
+      currentGame.executePlayerMove(i);
+      updateHoleAndWarehouseScores();
+    });
 
     bottomHoleDiv.appendChild(holeScoreDiv);
     bottomHoleDiv.appendChild(holeUiDiv);
@@ -74,11 +92,20 @@ function generateHoles() {
     holeUiDiv.className = "hole-ui";
     holeScoreDiv.className = "hole-score";
     holeScoreDiv.id = `hole-score-${i}`;
-    holeScoreDiv.innerHTML = i;
+    holeScoreDiv.innerHTML = currentGame.holes[i];
 
     topHoleDiv.appendChild(holeUiDiv);
     topHoleDiv.appendChild(holeScoreDiv);
 
     holeRowTopElem.appendChild(topHoleDiv);
+  }
+}
+
+export function updateHoleAndWarehouseScores() {
+  warehouseScoreLeft.innerHTML = currentGame.warehouses[0];
+  warehouseScoreRight.innerHTML = currentGame.warehouses[1];
+  for (let i = 0; i < currentGame.holes.length; i++) {
+    const holeScore = document.getElementById(`hole-score-${i}`);
+    holeScore.innerHTML = currentGame.holes[i];
   }
 }
