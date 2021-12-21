@@ -16,6 +16,7 @@ let holeRowTopElem = document.getElementById("hole-row-top");
 let holeRowBottomElem = document.getElementById("hole-row-bottom");
 let warehouseScoreLeft = document.getElementById("warehouse-left");
 let warehouseScoreRight = document.getElementById("warehouse-right");
+let restartGameButton = document.getElementById("restart-game");
 
 // settings variables
 let numberOfHoles = maxNumberOfHoles;
@@ -40,6 +41,7 @@ numberOfHolesMinusElem.addEventListener("click", () => {
 });
 
 startGameElem.addEventListener("click", startOrResetGame);
+restartGameButton.addEventListener("click", startOrResetGame);
 
 function updateNumberOfHoles() {
   numberOfHolesDisplayElem.innerHTML = numberOfHoles;
