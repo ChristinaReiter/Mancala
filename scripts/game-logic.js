@@ -39,12 +39,17 @@ export default class GameLogic {
     if (!this.isPlayerMoveValid(holeIndex)) return;
     console.log(`Player: Making a move on hole <${holeIndex}>`);
     const lastFilledHoleIndex = this.emptyHole(holeIndex);
-    if (!lastFilledHoleIndex) return;
+    if (lastFilledHoleIndex === null) {
+      console.log("AI: Something went wrong emptying the holes...");
+      return;
+    }
     this.moveSeedsToWarehouse(lastFilledHoleIndex, false);
     this.isPlayersTurn = false;
     this.checkGameOver();
     if (this.winner !== -1) {
-      console.log(`Gamemaster: We have a winner. Congrats player <${winner}>`);
+      console.log(
+        `Gamemaster: We have a winner. Congrats player <${this.winner}>`
+      );
       return;
     }
     if (this.numberOfPlayers === 1) this.executeAiMove();
@@ -55,7 +60,7 @@ export default class GameLogic {
     // TODO use better AI function
     setTimeout(() => {
       const holeIndex = this.findRandomAiMove();
-      if (!holeIndex) {
+      if (holeIndex === null) {
         console.log("AI: Sorry I can't do anything here :(");
         return;
       }
@@ -70,7 +75,7 @@ export default class GameLogic {
         return;
       }
       const lastFilledHoleIndex = this.emptyHole(holeIndex);
-      if (!lastFilledHoleIndex) {
+      if (lastFilledHoleIndex === null) {
         console.log("AI: Something went wrong emptying the holes...");
         return;
       }
@@ -89,7 +94,21 @@ export default class GameLogic {
   }
 
   moveSeedsToWarehouse(lastFilledHoleIndex, isOpponent) {
-    const lowerIndex = isOpponent ? this.opponentHolesIndex : 0;
+    // lower index for player is lowest opponent hole index and vice versa
+    const lowerIndex = isOpponent ? 0 : this.opponentHolesIndex;
+    // upper index for player is the highest opponent hole index and vice versa
+    const upperIndex = isOpponent
+      ? this.opponentHolesIndex - 1
+      : this.holes.length - 1;
+    if (
+      (isOpponent && lastFilledHoleIndex > upperIndex) ||
+      (!isOpponent && lastFilledHoleIndex < lowerIndex)
+    ) {
+      console.log(
+        `Gamemaster: Move ended on the moving player's own hole. No seeds can be moved`
+      );
+      return;
+    }
     const warehouseIndex = isOpponent ? 1 : 0;
     for (let i = lastFilledHoleIndex; i >= lowerIndex; i--) {
       let seedsFromHole = this.holes[i];
@@ -110,19 +129,16 @@ export default class GameLogic {
 
   // empties selected hole, returns index of last filled hole OR null on invalid hole index
   emptyHole(holeIndex) {
-    console.log("emptyHole start of function", holeIndex);
     if (holeIndex >= this.holes.length || holeIndex < 0) {
       console.warn(`emptyHole: called with invalid holeIndex <${holeIndex}>`);
       return;
     }
-    console.log("emptyHole line 118");
 
     let holeValue = this.holes[holeIndex];
     if (holeValue <= 0) {
       console.warn("emptyHole: hole is empty. will do nothing");
       return;
     }
-    console.log("emptyHole line 125");
     // empty selected hole
     this.holes[holeIndex] = 0;
     // fill next holes
@@ -131,8 +147,9 @@ export default class GameLogic {
       const targetHoleIndex = (holeIndex + i) % this.holes.length;
       this.holes[targetHoleIndex] = this.holes[targetHoleIndex] + 1;
     }
-    console.log("emptyHole line 133");
-    return (holeIndex + holeValue) % this.holes.length;
+    const lastFilledHoleIndex = (holeIndex + holeValue) % this.holes.length;
+    console.log("emptyHole returning", lastFilledHoleIndex);
+    return lastFilledHoleIndex;
   }
 
   isPlayerMoveValid(holeIndex) {
