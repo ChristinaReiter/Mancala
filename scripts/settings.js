@@ -99,6 +99,20 @@ function startOrResetGame() {
 
     holeRowTopElem.appendChild(topHoleDiv);
   }
+
+  // adjust the grid property of both hole rows to center the holes in the row correctly
+  let gridTemplateColumns = "";
+  for (let i = 0; i < numberOfHoles; i += 2) {
+    gridTemplateColumns += "auto ";
+  }
+  holeRowTopElem.setAttribute(
+    "style",
+    `display: grid; grid-template-columns: ${gridTemplateColumns}`
+  );
+  holeRowBottomElem.setAttribute(
+    "style",
+    `display: grid; grid-template-columns: ${gridTemplateColumns}`
+  );
 }
 
 export function updateHoleAndWarehouseScores() {

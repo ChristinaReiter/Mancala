@@ -10,6 +10,8 @@
 
 .hole {
   text-align: center;
+  margin-left: 6px;
+  margin-right: 6px;
 }
 
 .hole-ui {
@@ -29,7 +31,7 @@
   font-size: 20px;
   line-height: 27px;
   color: #433223;
-  padding: 5%;
+  padding: 6px;
 }
 
 .hole-divider {
