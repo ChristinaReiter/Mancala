@@ -155,7 +155,7 @@ export default class GameLogic {
   isPlayerMoveValid(holeIndex) {
     // check for invalid hole index
     if (holeIndex >= this.opponentHolesIndex || holeIndex < 0) {
-      return 0;
+      return false;
     }
     // check if it's the players turn
     if (!this.isPlayersTurn) return false;
@@ -188,7 +188,7 @@ export default class GameLogic {
   isOpponentMoveValid(holeIndex) {
     // check for invalid hole index
     if (holeIndex < this.opponentHolesIndex || holeIndex >= this.holes.length) {
-      return 0;
+      return false;
     }
     // check if the hole is empty
     if (this.holes[holeIndex] === 0) return false;

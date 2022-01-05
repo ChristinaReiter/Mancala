@@ -10,13 +10,19 @@ let numberOfHolesDisplayElem = document.querySelector(
 );
 let numberOfHolesMinusElem = document.querySelector(".number-of-holes-minus");
 let numberOfHolesPlusElem = document.querySelector(".number-of-holes-plus");
-let startGameElem = document.querySelector(".start-game-button");
-let darkOverlayElem = document.querySelector(".dark-overlay");
 let holeRowTopElem = document.getElementById("hole-row-top");
 let holeRowBottomElem = document.getElementById("hole-row-bottom");
+
+let startGameOverlayElem = document.getElementById("start-game-popup");
+let startGameButton = document.getElementById("start-game-button");
+let restartGameButton = document.getElementById("restart-game-button");
+let restartGameIcon = document.getElementById("restart-game-icon");
+
+let winnerElem = document.getElementById("winner-popup");
+let winnerTextElem = document.getElementById("winner-text");
+
 let warehouseScoreLeft = document.getElementById("warehouse-left");
 let warehouseScoreRight = document.getElementById("warehouse-right");
-let restartGameButton = document.getElementById("restart-game");
 
 // settings variables
 let numberOfHoles = maxNumberOfHoles;
@@ -40,15 +46,19 @@ numberOfHolesMinusElem.addEventListener("click", () => {
   }
 });
 
-startGameElem.addEventListener("click", startOrResetGame);
+startGameButton.addEventListener("click", startOrResetGame);
 restartGameButton.addEventListener("click", startOrResetGame);
+restartGameIcon.addEventListener("click", startOrResetGame);
 
 function updateNumberOfHoles() {
   numberOfHolesDisplayElem.innerHTML = numberOfHoles;
 }
 
 function startOrResetGame() {
-  darkOverlayElem.setAttribute("style", "display: none;");
+  startGameOverlayElem.setAttribute("style", "display: none;");
+  // hide winner popup
+  console.log("updating winner");
+  updateWinner(-1);
   // TODO integrate multiplayer option
   currentGame = new GameLogic(1, 0, numberOfHoles);
 
@@ -123,5 +133,17 @@ export function updateHoleAndWarehouseScores() {
   for (let i = 0; i < currentGame.holes.length; i++) {
     const holeScore = document.getElementById(`hole-score-${i}`);
     holeScore.innerHTML = currentGame.holes[i];
+  }
+}
+
+export function updateWinner(winnerIndex) {
+  if (winnerIndex === 0) {
+    winnerElem.setAttribute("style", "display: block;");
+    winnerTextElem.innerText = "YOU WON!";
+  } else if (winnerIndex === 1) {
+    winnerElem.setAttribute("style", "display: block;");
+    winnerTextElem.innerText = "YOU LOST :(";
+  } else if (winnerIndex === -1) {
+    winnerElem.setAttribute("style", "display: none;");
   }
 }

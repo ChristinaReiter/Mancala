@@ -50,3 +50,7 @@
 .start-game-button {
   margin-top: 20px;
 }
+
+.hidden-overlay {
+  display: none;
+}

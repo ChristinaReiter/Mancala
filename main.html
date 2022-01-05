@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="styles/popup.css" />
   </head>
   <body>
-    <!-- popups + overlay, only shown on initial load and icon click -->
-    <div class="dark-overlay">
+    <!-- popups + overlays -->
+    <div class="dark-overlay" id="start-game-popup">
       <div class="central-popup">
         <div class="popup-text popup-title">LET'S PLAY</div>
         <div class="number-of-holes-container">
@@ -19,7 +19,17 @@
           <h1 class="number-of-holes-display">(..)</h1>
           <button class="number-of-holes-plus">+</button>
         </div>
-        <button class="start-game-button">Start Game!</button>
+        <button class="start-game-button" id="start-game-button">
+          Start Game!
+        </button>
+      </div>
+    </div>
+    <div class="dark-overlay hidden-overlay" id="winner-popup">
+      <div class="central-popup">
+        <div class="popup-text popup-title" id="winner-text"></div>
+        <button class="start-game-button" id="restart-game-button">
+          Restart Game!
+        </button>
       </div>
     </div>
     <!-- logo -->
@@ -90,7 +100,7 @@
         </p>
         <p>
           <img
-            id="restart-game"
+            id="restart-game-icon"
             src="assets/refresh-ccw.png"
             alt="refresh-ccw"
           />
