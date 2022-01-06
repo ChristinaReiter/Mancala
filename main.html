@@ -22,6 +22,29 @@
         <button class="start-game-button">Start Game!</button>
       </div>
     </div>
+    <!-- closed popup-rules + overlay, by clicking on the '?' -->
+    <div class="rules-overlay">
+      <div class="central-popup">
+        <div class="popup-text popup-title">Rules</div>
+        <div class="rules-container">
+          <div class="popup-text">1. Rules rule rule rule</div>
+          <div class="popup-text">1. Rules rule rule rule</div>
+          <div class="popup-text">1. Rules rule rule rule</div>
+          <div class="popup-text">1. Rules rule rule rule</div>
+        </div>
+        <button class="rules-button">Got it!</button>
+      </div>
+    </div>
+    <!-- closed popup-login + overlay, by clicking on the button -->
+    <div class="login-overlay">
+      <div class="central-popup">
+        <div class="popup-text popup-title">Login</div>
+        <div class="login-container">
+          <div class="popup-text">Please enter your name:</div>
+        </div>
+        <button class="login-button">Got it!</button>
+      </div>
+    </div>
     <!-- logo -->
     <div class="logo">
       <img src="assets/logo.png" alt="logo" />
@@ -89,10 +112,10 @@
           <img src="assets/refresh-ccw.png" alt="refresh-ccw" />
         </p>
         <p>
-          <img src="assets/help-circle.png" alt="help-circle" />
+          <img class= "help-icon" src="assets/help-circle.png" alt="help-circle" />
         </p>
         <p>
-          <img src="assets/user.png" alt="user" />
+          <img class= "login-icon" src="assets/user.png" alt="user" />
         </p>
         <p>
           <img src="assets/rankings.png" alt="rankings" />
@@ -101,5 +124,6 @@
     </div>
     <!-- loading of js scripts -->
     <script src="scripts/settings.js"></script>
+    <script src="scripts/popups.js"></script>
   </body>
 </html>

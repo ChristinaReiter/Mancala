@@ -50,3 +50,43 @@
 .start-game-button {
   margin-top: 20px;
 }
+
+.rules-button {
+  margin-top: 20px;
+}
+
+.rules-container {
+  display: list-item;
+  padding: 10px;
+}
+
+.rules-overlay {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(17, 17, 17, 0.69);
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.login-button {
+  margin-top: 20px;
+}
+
+.login-container {
+  display: list-item;
+  padding: 10px;
+}
+
+.login-overlay {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(17, 17, 17, 0.69);
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
