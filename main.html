@@ -19,6 +19,18 @@
           <h1 class="number-of-holes-display">(..)</h1>
           <button class="number-of-holes-plus">+</button>
         </div>
+        <div class="number-of-seeds-container">
+          <div class="popup-text">Initial number of seeds</div>
+          <button class="number-of-seeds-minus">-</button>
+          <h1 class="number-of-seeds-display">(..)</h1>
+          <button class="number-of-seeds-plus">+</button>
+        </div>
+        <div class="setting-playmode-container">
+          <div class="popup-text">Playing against other players:<input type="checkbox" id="playmode"></div>
+        </div>
+        <div class="setting-playmode-container">
+          <div class="popup-text">The computer starts:<input type="checkbox" id="playmode"></div>
+        </div>
         <button class="start-game-button">Start Game!</button>
       </div>
     </div>
@@ -41,8 +53,22 @@
         <div class="popup-text popup-title">Login</div>
         <div class="login-container">
           <div class="popup-text">Please enter your name:</div>
+          <input type="text" name="username" value=""></div>
+          <button class="login-button">Save</button>
+          <button class="login-cancel-button">Cancel</button>
         </div>
-        <button class="login-button">Got it!</button>
+      </div>
+    </div>
+    <!-- closed popup-ranking + overlay, by clicking on the '?' -->
+    <div class="ranking-overlay">
+      <div class="central-popup">
+        <div class="popup-text popup-title">Ranking</div>
+        <div class="ranking-container">
+          <div class="popup-text">1.</div>
+          <div class="popup-text">2.</div>
+          <div class="popup-text">3.</div>
+        </div>
+        <button class="ranking-button">Ok</button>
       </div>
     </div>
     <!-- logo -->
@@ -118,7 +144,7 @@
           <img class= "login-icon" src="assets/user.png" alt="user" />
         </p>
         <p>
-          <img src="assets/rankings.png" alt="rankings" />
+          <img class = "ranking-icon" src="assets/rankings.png" alt="rankings" />
         </p>
       </div>
     </div>

@@ -18,6 +18,10 @@ rulesbutton.addEventListener("click",function() {
 let loginDisplay = document.querySelector(".login-overlay");
 let loginicon = document.querySelector(".login-icon");
 let loginbutton = document.querySelector(".login-button");
+let logincancelbutton = document.querySelector(".login-cancel-button");
+let username = document.getElementsByName("username")
+let usernamevalue = username.value
+
 
 
 loginicon.addEventListener("click",function() {
@@ -26,4 +30,24 @@ loginicon.addEventListener("click",function() {
 
 loginbutton.addEventListener("click",function() {
     loginDisplay.setAttribute("style", "display: none");
+
+},false);
+
+logincancelbutton.addEventListener("click",function() {
+    loginDisplay.setAttribute("style", "display: none");
+},false);
+
+//Ranking Popup
+
+let rankingDisplay = document.querySelector(".ranking-overlay");
+let rankingicon = document.querySelector(".ranking-icon");
+let rankingbutton = document.querySelector(".ranking-button");
+
+
+rankingicon.addEventListener("click",function() {
+    rankingDisplay.setAttribute("style", "display: list-item");
+},false);
+
+rankingbutton.addEventListener("click",function() {
+    rankingDisplay.setAttribute("style", "display: none");
 },false);

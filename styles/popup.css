@@ -47,6 +47,12 @@
   padding: 10px;
 }
 
+.number-of-seeds-container {
+  display: grid;
+  grid-template-columns: 4fr 1fr 1fr 1fr;
+  padding: 10px;
+}
+
 .start-game-button {
   margin-top: 20px;
 }
@@ -71,6 +77,10 @@
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
+.login-cancel-button {
+  margin-top: 20px;
+}
+
 .login-button {
   margin-top: 20px;
 }
@@ -81,6 +91,26 @@
 }
 
 .login-overlay {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(17, 17, 17, 0.69);
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.ranking-button {
+  margin-top: 20px;
+}
+
+.ranking-container {
+  display: list-item;
+  padding: 10px;
+}
+
+.ranking-overlay {
   display: none;
   position: fixed;
   width: 100%;
