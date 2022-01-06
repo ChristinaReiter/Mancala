@@ -1,4 +1,12 @@
-import { updateHoleAndWarehouseScores } from "./settings.js";
+import { updateHoleAndWarehouseScores, updateWinner } from "./settings.js";
+import {
+  isPlayerMoveValid,
+  isOpponentMoveValid,
+} from "./game-utils/move-validity.js";
+import {
+  countSeeds,
+  canSeedsBeMovedToWarehouse,
+} from "./game-utils/seed-counting.js";
 
 export default class GameLogic {
   initialSeedsPerHole = 4;
@@ -36,7 +44,19 @@ export default class GameLogic {
   }
 
   executePlayerMove(holeIndex) {
-    if (!this.isPlayerMoveValid(holeIndex)) return;
+    if (
+      !isPlayerMoveValid(
+        holeIndex,
+        this.holes,
+        this.opponentHolesIndex,
+        this.isPlayersTurn
+      )
+    ) {
+      console.log(
+        `Gamemaster: This move on hole <${holeIndex}> is invalid, please choose another one`
+      );
+      return;
+    }
     console.log(`Player: Making a move on hole <${holeIndex}>`);
     const lastFilledHoleIndex = this.emptyHole(holeIndex);
     if (lastFilledHoleIndex === null) {
@@ -50,6 +70,7 @@ export default class GameLogic {
       console.log(
         `Gamemaster: We have a winner. Congrats player <${this.winner}>`
       );
+      updateWinner(this.winner);
       return;
     }
     if (this.numberOfPlayers === 1) this.executeAiMove();
@@ -70,7 +91,14 @@ export default class GameLogic {
         );
         return;
       }
-      if (!this.isOpponentMoveValid(holeIndex)) {
+      if (
+        !isOpponentMoveValid(
+          holeIndex,
+          this.holes,
+          this.opponentHolesIndex,
+          this.isPlayersTurn
+        )
+      ) {
         console.log("AI: My chosen move was invalid. Stopping.");
         return;
       }
@@ -86,7 +114,7 @@ export default class GameLogic {
       updateHoleAndWarehouseScores();
       if (this.winner !== -1) {
         console.log(
-          `Gamemaster: We have a winner. Congrats player <${winner}>`
+          `Gamemaster: We have a winner. Congrats player <${this.winner}>`
         );
         return;
       }
@@ -113,7 +141,7 @@ export default class GameLogic {
     for (let i = lastFilledHoleIndex; i >= lowerIndex; i--) {
       let seedsFromHole = this.holes[i];
       console.log(`Gamemaster: Hole <${i}> now has <${this.holes[i]}> seeds.`);
-      if (this.canSeedsBeMovedToWarehouse(seedsFromHole)) {
+      if (canSeedsBeMovedToWarehouse(seedsFromHole)) {
         console.log(
           `Gamemaster: <${seedsFromHole}> seeds from hole <${i}> can be moved to warehouse <${warehouseIndex}>`
         );
@@ -152,118 +180,71 @@ export default class GameLogic {
     return lastFilledHoleIndex;
   }
 
-  isPlayerMoveValid(holeIndex) {
-    // check for invalid hole index
-    if (holeIndex >= this.opponentHolesIndex || holeIndex < 0) {
-      return false;
-    }
-    // check if it's the players turn
-    if (!this.isPlayersTurn) return false;
-    // check if all of the opponent's holes are empty, if yes check that the move will fill at least one of them
-    let totalOpponentSeeds = this.countSeeds(true);
-    if (
-      totalOpponentSeeds === 0 &&
-      holeIndex + this.holes[holeIndex] < this.opponentHolesIndex
-    ) {
-      return false;
-    }
-    // check if the move would take all of the opponent's remaining seeds
-    const finalFilledHoleIndex =
-      (holeIndex + this.holes[holeIndex]) % this.holes.length;
-    let seedsToBeMoved = 0;
-    for (let i = finalFilledHoleIndex; i >= this.opponentHolesIndex; i--) {
-      let seedsFromHole = this.holes[i] + 1;
-      if (this.canSeedsBeMovedToWarehouse(seedsFromHole)) {
-        seedsToBeMoved += seedsFromHole;
-      } else {
-        break;
-      }
-    }
-    if (seedsToBeMoved === totalOpponentSeeds) {
-      return false;
-    }
-    return true;
-  }
-
-  isOpponentMoveValid(holeIndex) {
-    // check for invalid hole index
-    if (holeIndex < this.opponentHolesIndex || holeIndex >= this.holes.length) {
-      return false;
-    }
-    // check if the hole is empty
-    if (this.holes[holeIndex] === 0) return false;
-    // check if it's the players turn
-    if (this.isPlayersTurn) return false;
-    // check if all of the player's holes are empty, if yes check that the move will fill at least one of them
-    let totalPlayerSeeds = this.countSeeds(false);
-    if (
-      totalPlayerSeeds === 0 &&
-      (holeIndex + this.holes[holeIndex]) % this.holes.length >=
-        this.opponentHolesIndex
-    ) {
-      return false;
-    }
-    // check if the move would take all of the opponent's remaining seeds
-    const finalFilledHoleIndex =
-      (holeIndex + this.holes[holeIndex]) % this.holes.length;
-    let seedsToBeMoved = 0;
-    for (let i = finalFilledHoleIndex; i >= 0; i--) {
-      let seedsFromHole = this.holes[i] + 1;
-      if (this.canSeedsBeMovedToWarehouse(seedsFromHole)) {
-        seedsToBeMoved += seedsFromHole;
-      } else {
-        break;
-      }
-    }
-    if (seedsToBeMoved === totalPlayerSeeds) {
-      return false;
-    }
-    return true;
-  }
-
-  countSeeds(isOpponent) {
-    const lowerIndex = isOpponent ? this.opponentHolesIndex : 0;
-    const upperIndex = isOpponent
-      ? this.holes.length
-      : this.opponentHolesIndex - 1;
-    let totalSeeds = 0;
-    for (let i = lowerIndex; i <= upperIndex; i++) {
-      totalSeeds += this.holes[i];
-    }
-    return totalSeeds;
-  }
-
-  canSeedsBeMovedToWarehouse(value) {
-    return value === 2 ? true : value === 3 ? true : false;
-  }
-
   checkGameOver() {
     // player has enough seeds in his / her warehouse
     if (this.warehouses[0] >= this.seedsToWin) {
       this.winner = 0;
+      console.log(
+        "Gamemaster: Game is over because player has enough seeds to win."
+      );
       // opponents has enough seeds in his / her  warehouse
     } else if (this.warehouses[1] >= this.seedsToWin) {
       this.winner = 1;
+      console.log(
+        "Gamemaster: Game is over because opponent has enough seeds to win."
+      );
     } else {
-      const playerTotalSeeds = this.countSeeds(false);
-      const opponentTotalSeeds = this.countSeeds(true);
+      const playerTotalSeeds = countSeeds(
+        false,
+        this.holes,
+        this.opponentHolesIndex
+      );
+      const opponentTotalSeeds = countSeeds(
+        true,
+        this.holes,
+        this.opponentHolesIndex
+      );
       let gameIsOver = false;
       // player has no seeds in his holes and opponent can not make any move that would change that
       if (playerTotalSeeds === 0) {
         gameIsOver = true;
         for (let i = 0; i < this.opponentHolesIndex; i++) {
-          if (this.isPlayerMoveValid(i)) {
+          if (
+            isPlayerMoveValid(
+              i,
+              this.holes,
+              this.opponentHolesIndex,
+              this.isPlayersTurn
+            )
+          ) {
             gameIsOver = false;
             break;
+          }
+          if (gameIsOver) {
+            console.log(
+              "Gamemaster: Game is over because player has no seeds in his holes and opponent can not make any move that would change that."
+            );
           }
         }
         // opponent has no seeds in his holes and player can not make any move that would change that
       } else if (opponentTotalSeeds === 0) {
         gameIsOver = true;
         for (let i = this.opponentHolesIndex; i < this.holes.length; i++) {
-          if (this.isOpponentMoveValid(i)) {
+          if (
+            isOpponentMoveValid(
+              i,
+              this.holes,
+              this.opponentHolesIndex,
+              this.isPlayersTurn
+            )
+          ) {
             gameIsOver = false;
             break;
+          }
+          if (gameIsOver) {
+            console.log(
+              "Gamemaster: Game is over because opponent has no seeds in his holes and player can not make any move that would change that."
+            );
           }
         }
       }
@@ -284,7 +265,14 @@ export default class GameLogic {
     for (let i = 0; i < shuffledMoveArray.length; i++) {
       const selectedMove = shuffledMoveArray[i];
       console.log(`AI: Testing move <${selectedMove}>.`);
-      if (this.isOpponentMoveValid(selectedMove)) {
+      if (
+        isOpponentMoveValid(
+          selectedMove,
+          this.holes,
+          this.opponentHolesIndex,
+          this.isPlayersTurn
+        )
+      ) {
         return selectedMove;
       }
       console.log(`AI: Move <${selectedMove}> is invalid.`);

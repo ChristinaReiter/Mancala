@@ -57,7 +57,6 @@ function updateNumberOfHoles() {
 function startOrResetGame() {
   startGameOverlayElem.setAttribute("style", "display: none;");
   // hide winner popup
-  console.log("updating winner");
   updateWinner(-1);
   // TODO integrate multiplayer option
   currentGame = new GameLogic(1, 0, numberOfHoles);
