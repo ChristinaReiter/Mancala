@@ -19,7 +19,7 @@ body {
 }
 
 .gameboard {
-  width: 850px;
+  min-width: 850px;
   height: 350px;
   margin: 0 auto;
   background: #826347;

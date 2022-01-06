@@ -57,6 +57,10 @@
   margin-top: 20px;
 }
 
+.hidden-overlay {
+  display: none;
+}
+
 .rules-button {
   margin-top: 20px;
 }

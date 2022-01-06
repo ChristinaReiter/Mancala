@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="styles/popup.css" />
   </head>
   <body>
-    <!-- popups + overlay, only shown on initial load and icon click -->
-    <div class="dark-overlay">
+    <!-- popups + overlays -->
+    <div class="dark-overlay" id="start-game-popup">
       <div class="central-popup">
         <div class="popup-text popup-title">LET'S PLAY</div>
         <div class="number-of-holes-container">
@@ -31,7 +31,16 @@
         <div class="setting-playmode-container">
           <div class="popup-text">The computer starts:<input type="checkbox" id="playmode"></div>
         </div>
-        <button class="start-game-button">Start Game!</button>
+        <button class="start-game-button" id="start-game-button">Start Game!</button>
+      </div>
+    </div>
+    <!-- closed end-of-game popup + overlay, opens automatically on game end -->
+    <div class="dark-overlay hidden-overlay" id="winner-popup">
+      <div class="central-popup">
+        <div class="popup-text popup-title" id="winner-text"></div>
+        <button class="start-game-button" id="restart-game-button">
+          Restart Game!
+        </button>
       </div>
     </div>
     <!-- closed popup-rules + overlay, by clicking on the '?' -->
@@ -80,7 +89,7 @@
       <!-- gameboard -->
       <div class="gameboard">
         <div class="warehouse-container">
-          <div class="warehouse-score"><span>5</span></div>
+          <div id="warehouse-left" class="warehouse-score"><span>5</span></div>
           <div class="warehouse-ui warehouse-ui-left"></div>
         </div>
         <div class="hole-container">
@@ -124,7 +133,10 @@
         </div>
         <div class="warehouse-container">
           <div class="warehouse-ui warehouse-ui-right"></div>
-          <div class="warehouse-score warehouse-score-right">
+          <div
+            id="warehouse-right"
+            class="warehouse-score warehouse-score-right"
+          >
             <span>5</span>
           </div>
         </div>
@@ -135,7 +147,11 @@
           <img src="assets/settings.png" alt="settings" />
         </p>
         <p>
-          <img src="assets/refresh-ccw.png" alt="refresh-ccw" />
+          <img
+            id="restart-game-icon"
+            src="assets/refresh-ccw.png"
+            alt="refresh-ccw"
+          />
         </p>
         <p>
           <img class= "help-icon" src="assets/help-circle.png" alt="help-circle" />
@@ -149,7 +165,7 @@
       </div>
     </div>
     <!-- loading of js scripts -->
-    <script src="scripts/settings.js"></script>
+    <script type="module" src="scripts/settings.js"></script>
     <script src="scripts/popups.js"></script>
   </body>
 </html>
