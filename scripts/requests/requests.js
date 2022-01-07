@@ -4,15 +4,41 @@ export async function getRanking() {
     const response = await fetch("/ranking");
     if (response.status == 200) {
       const result = await response.text();
-      console.log("result", result);
+      console.log("ranking result", result);
     } else {
       console.error(
-        "Get Ranking responded with",
+        "Get ranking responded with",
         response?.status,
         response?.statusText
       );
     }
   } catch (error) {
     console.error("Error querying ranking", error);
+  }
+}
+
+export async function registerUser(username, password) {
+  // TODO passsword encryption
+  console.log("registerUser is called");
+  try {
+    const response = await fetch("/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
+    if (response.status == 200) {
+      const result = await response.text();
+      console.log("result", result);
+    } else {
+      console.error(
+        "Register user responded with",
+        response?.status,
+        response?.statusText
+      );
+    }
+  } catch (error) {
+    console.error("Error registering user", error);
   }
 }
