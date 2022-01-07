@@ -146,3 +146,5 @@ export function updateWinner(winnerIndex) {
     winnerElem.setAttribute("style", "display: none;");
   }
 }
+
+
