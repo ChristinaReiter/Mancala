@@ -1,13 +1,15 @@
 # Run WLT-Mancala
 
-1. Install dependencies (only once)
+## 1. Start server
 
-   npm install
+### Via production server
 
-2. Run local server to serves the main html file
+node server.js
 
-   node server.js
+### Via dev server (with hot reloading
 
-3. Open mancala in the browser
+node devServer.js
 
-   http://localhost:8080/main.html
+## 2. Open mancala in the browser
+
+http://localhost:8081/
