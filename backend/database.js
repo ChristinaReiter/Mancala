@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const hashing = require("./hashing.js");
 
 const userFile = path.join(__dirname, ".storage/users.json");
 let users = null;
@@ -21,9 +22,12 @@ module.exports.registerUser = (username, password) => {
   if (!username || !password) {
     return false;
   }
+
+  const hashedPassword = hashing.hashString(password);
+
   for (let user of users) {
     if (user?.username === username) {
-      if (user.password === password) {
+      if (user.password === hashedPassword) {
         return true;
       } else {
         return false;
@@ -32,7 +36,7 @@ module.exports.registerUser = (username, password) => {
   }
   users.push({
     username,
-    password,
+    password: hashedPassword,
   });
   updateFile(userFile, users);
   return true;

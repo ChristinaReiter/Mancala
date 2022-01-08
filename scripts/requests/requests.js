@@ -18,8 +18,6 @@ export async function getRanking() {
 }
 
 export async function registerUser(username, password) {
-  // TODO passsword encryption
-  console.log("registerUser is called");
   try {
     const response = await fetch("/register", {
       method: "POST",
@@ -30,10 +28,9 @@ export async function registerUser(username, password) {
     });
     if (response.status == 200) {
       const result = await response.text();
-      console.log("result", result);
     } else {
       console.error(
-        "Register user responded with",
+        "Register user responded with error",
         response?.status,
         response?.statusText
       );
