@@ -5,6 +5,13 @@ const hashing = require("./hashing.js");
 const userFile = path.join(__dirname, ".storage/users.json");
 let users = null;
 
+const rankingFile = path.join(__dirname, ".storage/ranking.json");
+let ranking = null;
+const initialRankingData = [
+  { nick: "jpleal", victories: 2, games: 2 },
+  { nick: "zp", victories: 0, games: 2 },
+];
+
 checkForFile(userFile, function () {
   fs.readFile(
     path.join(__dirname, ".storage/users.json"),
@@ -17,6 +24,27 @@ checkForFile(userFile, function () {
     }
   );
 });
+
+checkForFile(
+  rankingFile,
+  function () {
+    fs.readFile(
+      path.join(__dirname, ".storage/ranking.json"),
+      function (err, data) {
+        if (!err) {
+          ranking = JSON.parse(data.toString());
+        } else {
+          console.error("Error reading ranking.json", err);
+        }
+      }
+    );
+  },
+  initialRankingData
+);
+
+module.exports.getRankings = () => {
+  return ranking;
+};
 
 module.exports.registerUser = (username, password) => {
   if (!username || !password) {
@@ -55,14 +83,19 @@ function updateFile(fileName, data) {
 //checks if the file exists.
 //If it does, it just calls back.
 //If it doesn't, then the file is created.
-function checkForFile(fileName, callback) {
+function checkForFile(fileName, callback, data = null) {
   fs.exists(fileName, function (exists) {
     if (exists) {
       callback();
     } else {
-      fs.writeFile(fileName, "[]", { flag: "wx" }, function (err, data) {
-        callback();
-      });
+      fs.writeFile(
+        fileName,
+        data ? JSON.stringify(data) : "[]",
+        { flag: "wx" },
+        function (err, data) {
+          callback();
+        }
+      );
     }
   });
 }

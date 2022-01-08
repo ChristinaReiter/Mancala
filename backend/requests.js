@@ -1,19 +1,8 @@
 const database = require("./database.js");
 
-// TODO move to database
-const ranking = [
-  {
-    ranking: [
-      { nick: "jpleal", victories: 2, games: 2 },
-      { nick: "zp", victories: 0, games: 2 },
-    ],
-  },
-];
-
 module.exports.handleBackendRequest = (req, res) => {
   if (req.url === "/ranking") {
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify(ranking));
+    handleRanking(req, res);
   } else if (req.url === "/register") {
     handleRegisterUser(req, res);
   } else {
@@ -37,6 +26,16 @@ async function handleRegisterUser(req, res) {
     res.writeHead(200);
     res.end();
   }
+}
+
+async function handleRanking(req, res) {
+  res.writeHead(200, { "Content-Type": "application/json" });
+  const ranking = database.getRankings();
+  res.end(
+    JSON.stringify({
+      ranking,
+    })
+  );
 }
 
 async function parseData(req) {
