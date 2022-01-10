@@ -1,4 +1,4 @@
-import { updateHoleAndWarehouseScores, updateWinner } from "./settings.js";
+import { updateHoleAndWarehouseScores, updateWinner, displayHoleSeeds, displayWarehouseSeeds } from "./settings.js";
 import {
   isPlayerMoveValid,
   isOpponentMoveValid,
@@ -66,6 +66,9 @@ export default class GameLogic {
     this.moveSeedsToWarehouse(lastFilledHoleIndex, false);
     this.isPlayersTurn = false;
     this.checkGameOver();
+    updateHoleAndWarehouseScores();
+    displayWarehouseSeeds();
+    displayHoleSeeds();
     if (this.winner !== -1) {
       console.log(
         `Gamemaster: We have a winner. Congrats player <${this.winner}>`
@@ -112,6 +115,8 @@ export default class GameLogic {
       this.isPlayersTurn = true;
       this.checkGameOver();
       updateHoleAndWarehouseScores();
+      displayWarehouseSeeds();
+      displayHoleSeeds();
       if (this.winner !== -1) {
         console.log(
           `Gamemaster: We have a winner. Congrats player <${this.winner}>`
