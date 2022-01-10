@@ -24,6 +24,17 @@ let winnerTextElem = document.getElementById("winner-text");
 let warehouseScoreLeft = document.getElementById("warehouse-left");
 let warehouseScoreRight = document.getElementById("warehouse-right");
 
+//variables for Seed Settings
+export let numberOfSeeds = 5;
+const minNumberOfSeeds = 1;
+const maxNumberOfSeeds = 15;
+let numberOfSeedsDisplayElem = document.querySelector(
+  ".number-of-seeds-display"
+);
+let numberOfSeedsMinusElem = document.querySelector(".number-of-seeds-minus");
+let numberOfSeedsPlusElem = document.querySelector(".number-of-seeds-plus");
+
+
 // settings variables
 let numberOfHoles = maxNumberOfHoles;
 
@@ -31,6 +42,7 @@ let numberOfHoles = maxNumberOfHoles;
 let currentGame;
 
 updateNumberOfHoles();
+updateNumberOfSeeds()
 
 numberOfHolesPlusElem.addEventListener("click", () => {
   if (numberOfHoles < maxNumberOfHoles) {
@@ -216,4 +228,25 @@ export function displayHoleSeeds() {
 
 function getRandomNumber(min, max) {
   return Math.random() * (max - min) + min;
+}
+
+
+
+
+numberOfSeedsPlusElem.addEventListener("click", () => {
+  if (numberOfSeeds < maxNumberOfSeeds) {
+    numberOfSeeds += 1;
+    updateNumberOfSeeds();
+  }
+});
+
+numberOfSeedsMinusElem.addEventListener("click", () => {
+  if (numberOfSeeds > minNumberOfSeeds) {
+    numberOfSeeds -= 1;
+    updateNumberOfSeeds();
+  }
+});
+
+function updateNumberOfSeeds() {
+  numberOfSeedsDisplayElem.innerHTML = numberOfSeeds;
 }

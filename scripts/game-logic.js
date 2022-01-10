@@ -1,4 +1,4 @@
-import { updateHoleAndWarehouseScores, updateWinner, displayHoleSeeds, displayWarehouseSeeds } from "./settings.js";
+import { updateHoleAndWarehouseScores, numberOfSeeds, updateWinner, displayHoleSeeds, displayWarehouseSeeds } from "./settings.js";
 import {
   isPlayerMoveValid,
   isOpponentMoveValid,
@@ -9,7 +9,7 @@ import {
 } from "./game-utils/seed-counting.js";
 
 export default class GameLogic {
-  initialSeedsPerHole = 4;
+  initialSeedsPerHole = numberOfSeeds;
   seedsToWin = 24;
   // game against AI --> 1, game against another player 2;
   numberOfPlayers;

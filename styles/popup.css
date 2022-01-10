@@ -90,15 +90,16 @@
 }
 
 .login-cancel-button {
+  position: relative;
   margin-top: 20px;
 }
 
 .login-button {
+  position: relative;
   margin-top: 20px;
 }
 
 .login-container {
-  display: list-item;
   padding: 10px;
 }
 
