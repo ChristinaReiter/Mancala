@@ -38,3 +38,13 @@
   height: 1px;
   background-color: #433223;
 }
+
+.seeds {
+  position: fixed;
+  width: 27px;
+  height: 40px;
+  background: #3c4484;
+  box-shadow: inset 0px -9px 4px rgba(0, 0, 0, 0.25);
+  transform: rotate(26deg);
+  border-radius: 50%;
+}

@@ -6,7 +6,7 @@ let rulesbutton = document.querySelector(".rules-button");
 
 
 rulesicon.addEventListener("click",function() {
-    rulesDisplay.setAttribute("style", "display: list-item");
+    rulesDisplay.setAttribute("style", "display: list-item; z-index: 10");
 },false);
 
 rulesbutton.addEventListener("click",function() {
@@ -25,7 +25,7 @@ let usernamevalue = username.value
 
 
 loginicon.addEventListener("click",function() {
-    loginDisplay.setAttribute("style", "display: list-item");
+    loginDisplay.setAttribute("style", "display: list-item; z-index: 10");
 },false);
 
 loginbutton.addEventListener("click",function() {
@@ -45,7 +45,7 @@ let rankingbutton = document.querySelector(".ranking-button");
 
 
 rankingicon.addEventListener("click",function() {
-    rankingDisplay.setAttribute("style", "display: list-item");
+    rankingDisplay.setAttribute("style", "display: list-item; z-index: 10");
 },false);
 
 rankingbutton.addEventListener("click",function() {

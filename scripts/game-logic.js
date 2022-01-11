@@ -1,4 +1,10 @@
-import { updateHoleAndWarehouseScores, updateWinner } from "./settings.js";
+import {
+  updateHoleAndWarehouseScores,
+  numberOfSeeds,
+  updateWinner,
+  displayHoleSeeds,
+  displayWarehouseSeeds,
+} from "./settings.js";
 import {
   isPlayerMoveValid,
   isOpponentMoveValid,
@@ -9,7 +15,7 @@ import {
 } from "./game-utils/seed-counting.js";
 
 export default class GameLogic {
-  initialSeedsPerHole = 4;
+  initialSeedsPerHole = numberOfSeeds;
   seedsToWin = 24;
   // game against AI --> 1, game against another player 2;
   numberOfPlayers;
@@ -66,6 +72,9 @@ export default class GameLogic {
     this.moveSeedsToWarehouse(lastFilledHoleIndex, false);
     this.isPlayersTurn = false;
     this.checkGameOver();
+    updateHoleAndWarehouseScores();
+    displayWarehouseSeeds();
+    displayHoleSeeds();
     if (this.winner !== -1) {
       console.log(
         `Gamemaster: We have a winner. Congrats player <${this.winner}>`
@@ -112,6 +121,8 @@ export default class GameLogic {
       this.isPlayersTurn = true;
       this.checkGameOver();
       updateHoleAndWarehouseScores();
+      displayWarehouseSeeds();
+      displayHoleSeeds();
       if (this.winner !== -1) {
         console.log(
           `Gamemaster: We have a winner. Congrats player <${this.winner}>`

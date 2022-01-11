@@ -61,6 +61,14 @@
   display: none;
 }
 
+.rules-text {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 42px;
+  color: #ffffff;
+}
+
 .rules-button {
   margin-top: 20px;
 }
@@ -82,15 +90,16 @@
 }
 
 .login-cancel-button {
+  position: relative;
   margin-top: 20px;
 }
 
 .login-button {
+  position: relative;
   margin-top: 20px;
 }
 
 .login-container {
-  display: list-item;
   padding: 10px;
 }
 
