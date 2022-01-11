@@ -34,7 +34,6 @@ let numberOfSeedsDisplayElem = document.querySelector(
 let numberOfSeedsMinusElem = document.querySelector(".number-of-seeds-minus");
 let numberOfSeedsPlusElem = document.querySelector(".number-of-seeds-plus");
 
-
 // settings variables
 let numberOfHoles = maxNumberOfHoles;
 
@@ -42,7 +41,7 @@ let numberOfHoles = maxNumberOfHoles;
 let currentGame;
 
 updateNumberOfHoles();
-updateNumberOfSeeds()
+updateNumberOfSeeds();
 
 numberOfHolesPlusElem.addEventListener("click", () => {
   if (numberOfHoles < maxNumberOfHoles) {
@@ -164,20 +163,21 @@ export function updateWinner(winnerIndex) {
   }
 }
 
-
-
 export function displayWarehouseSeeds() {
   let leftWarehouse = document.getElementById("warehouse-ui-left");
   let anzahlWarehouseSeedsLeft = leftWarehouse.childElementCount;
 
-  if (currentGame.warehouses[0] > anzahlWarehouseSeedsLeft){
+  if (currentGame.warehouses[0] > anzahlWarehouseSeedsLeft) {
     var countAddSeedsL = currentGame.warehouses[0] - anzahlWarehouseSeedsLeft;
     for (let i = 0; i < countAddSeedsL; i++) {
       var seedDivL = document.createElement("div");
       seedDivL.className = "seeds";
-      var randomTopL = getRandomNumber(10,150);
+      var randomTopL = getRandomNumber(10, 150);
       var randomLeftL = getRandomNumber(10, 90);
-      seedDivL.setAttribute("style", `margin-top: ${randomTopL}px; margin-left: ${randomLeftL}px`);
+      seedDivL.setAttribute(
+        "style",
+        `margin-top: ${randomTopL}px; margin-left: ${randomLeftL}px`
+      );
       leftWarehouse.appendChild(seedDivL);
     }
   } else {
@@ -186,14 +186,17 @@ export function displayWarehouseSeeds() {
   let rightWarehouse = document.getElementById("warehouse-ui-right");
   let anzahlWarehouseSeedsRight = rightWarehouse.childElementCount;
 
-  if (currentGame.warehouses[1] > anzahlWarehouseSeedsRight){
+  if (currentGame.warehouses[1] > anzahlWarehouseSeedsRight) {
     var countAddSeedsR = currentGame.warehouses[1] - anzahlWarehouseSeedsRight;
     for (let i = 0; i < countAddSeedsR; i++) {
       var seedDivR = document.createElement("div");
       seedDivR.className = "seeds";
-      var randomTopR = getRandomNumber(10,150);
+      var randomTopR = getRandomNumber(10, 150);
       var randomLeftR = getRandomNumber(10, 90);
-      seedDivR.setAttribute("style", `margin-top: ${randomTopR}px; margin-left: ${randomLeftR}px`);
+      seedDivR.setAttribute(
+        "style",
+        `margin-top: ${randomTopR}px; margin-left: ${randomLeftR}px`
+      );
       rightWarehouse.appendChild(seedDivR);
     }
   } else {
@@ -204,34 +207,32 @@ export function displayHoleSeeds() {
   for (let i = 0; i < currentGame.holes.length; i++) {
     let holeIndexed = document.getElementById(`hole-ui-${i}`);
     let seedNumber = holeIndexed.childElementCount;
-    if (currentGame.holes[i] > seedNumber){
+    if (currentGame.holes[i] > seedNumber) {
       var countAddSeeds = currentGame.holes[i] - seedNumber;
       for (let n = 0; n < countAddSeeds; n++) {
         var seedDiv = document.createElement("div");
         seedDiv.className = "seeds";
-        var randomTop = getRandomNumber(10,60);
+        var randomTop = getRandomNumber(10, 60);
         var randomLeft = getRandomNumber(10, 45);
-        seedDiv.setAttribute("style", `margin-top: ${randomTop}px; margin-left: ${randomLeft}px`);
+        seedDiv.setAttribute(
+          "style",
+          `margin-top: ${randomTop}px; margin-left: ${randomLeft}px`
+        );
         holeIndexed.appendChild(seedDiv);
       }
-    } else if (currentGame.holes[i] < seedNumber){
-      var countDeleteSeeds =  seedNumber - currentGame.holes[i];
+    } else if (currentGame.holes[i] < seedNumber) {
+      var countDeleteSeeds = seedNumber - currentGame.holes[i];
       for (let n = 0; n < countDeleteSeeds; n++) {
         holeIndexed.removeChild(holeIndexed.lastChild);
       }
-    }else{
+    } else {
     }
   }
-
 }
-
 
 function getRandomNumber(min, max) {
   return Math.random() * (max - min) + min;
 }
-
-
-
 
 numberOfSeedsPlusElem.addEventListener("click", () => {
   if (numberOfSeeds < maxNumberOfSeeds) {

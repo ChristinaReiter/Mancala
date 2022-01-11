@@ -1,4 +1,10 @@
-import { updateHoleAndWarehouseScores, numberOfSeeds, updateWinner, displayHoleSeeds, displayWarehouseSeeds } from "./settings.js";
+import {
+  updateHoleAndWarehouseScores,
+  numberOfSeeds,
+  updateWinner,
+  displayHoleSeeds,
+  displayWarehouseSeeds,
+} from "./settings.js";
 import {
   isPlayerMoveValid,
   isOpponentMoveValid,

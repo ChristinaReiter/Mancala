@@ -26,12 +26,21 @@
           <button class="number-of-seeds-plus">+</button>
         </div>
         <div class="setting-playmode-container">
-          <div class="popup-text">Playing against other players:<input type="checkbox" id="playmode"></div>
+          <div class="popup-text">
+            Playing against other players:<input
+              type="checkbox"
+              id="playmode"
+            />
+          </div>
         </div>
         <div class="setting-playmode-container">
-          <div class="popup-text">The computer starts:<input type="checkbox" id="playmode"></div>
+          <div class="popup-text">
+            The computer starts:<input type="checkbox" id="playmode" />
+          </div>
         </div>
-        <button class="start-game-button" id="start-game-button">Start Game!</button>
+        <button class="start-game-button" id="start-game-button">
+          Start Game!
+        </button>
       </div>
     </div>
     <!-- closed end-of-game popup + overlay, opens automatically on game end -->
@@ -48,9 +57,30 @@
       <div class="central-popup">
         <div class="popup-text popup-title">Rules</div>
         <div class="rules-container">
-          <div class="rules-text">The Mancala is a family of African origin games, known as sowing games, Or count and capture. They are played on boards with hollows containing grains or beads.</div>
-          <div class="rules-text">The big holes on the left and right side are the warehouses and two sets of aligned center cavities. Each player controls the cavity on his side and the warehouse on their left side. Therefore, you control the warehouse on the left and the row down.</div>
-          <div class="rules-text">Initially there is an equal number of seeds in the row of wholes. The idea of the game is to sow your seeds. By selecting (clicking) a cavity on your side with the seeds you want to sow, the seeds are going to be sowed counterclockwise. BUT if the next cavity is the warehouse, you sow there as well, but not in the warehouse of the other player. And if the last seed is sowed in your warehouse, you can play again. If the last seed is in an empty cavity of yours, the seed and the seeds on the other players side are added to your warehouse. The play ends if one player runs out of seeds and the other player collects the seeds which are stored in their cavities. The player with the most seeds in their warehouse is winning.</div>
+          <div class="rules-text">
+            The Mancala is a family of African origin games, known as sowing
+            games, Or count and capture. They are played on boards with hollows
+            containing grains or beads.
+          </div>
+          <div class="rules-text">
+            The big holes on the left and right side are the warehouses and two
+            sets of aligned center cavities. Each player controls the cavity on
+            his side and the warehouse on their left side. Therefore, you
+            control the warehouse on the left and the row down.
+          </div>
+          <div class="rules-text">
+            Initially there is an equal number of seeds in the row of wholes.
+            The idea of the game is to sow your seeds. By selecting (clicking) a
+            cavity on your side with the seeds you want to sow, the seeds are
+            going to be sowed counterclockwise. BUT if the next cavity is the
+            warehouse, you sow there as well, but not in the warehouse of the
+            other player. And if the last seed is sowed in your warehouse, you
+            can play again. If the last seed is in an empty cavity of yours, the
+            seed and the seeds on the other players side are added to your
+            warehouse. The play ends if one player runs out of seeds and the
+            other player collects the seeds which are stored in their cavities.
+            The player with the most seeds in their warehouse is winning.
+          </div>
         </div>
         <button class="rules-button">Got it!</button>
       </div>
@@ -61,10 +91,10 @@
         <div class="popup-text popup-title">Login</div>
         <div class="login-container">
           <div class="popup-text">Name:</div>
-          <input type="text" name="username" value="">
+          <input type="text" name="username" value="" />
           <div class="popup-text">Password:</div>
-          <input type="text" name="password" value="">
-          <div class = "login-button-container">
+          <input type="text" name="password" value="" />
+          <div class="login-button-container">
             <button class="login-button">Save</button>
             <button class="login-cancel-button">Cancel</button>
           </div>
@@ -93,7 +123,10 @@
       <div class="gameboard">
         <div class="warehouse-container">
           <div id="warehouse-left" class="warehouse-score"><span>5</span></div>
-          <div id= "warehouse-ui-left" class="warehouse-ui warehouse-ui-left"></div>
+          <div
+            id="warehouse-ui-left"
+            class="warehouse-ui warehouse-ui-left"
+          ></div>
         </div>
         <div class="hole-container">
           <div class="hole-row" id="hole-row-top">
@@ -135,7 +168,10 @@
           </div>
         </div>
         <div class="warehouse-container">
-          <div id="warehouse-ui-right" class="warehouse-ui warehouse-ui-right"></div>
+          <div
+            id="warehouse-ui-right"
+            class="warehouse-ui warehouse-ui-right"
+          ></div>
           <div
             id="warehouse-right"
             class="warehouse-score warehouse-score-right"
@@ -157,13 +193,17 @@
           />
         </p>
         <p>
-          <img class= "help-icon" src="assets/help-circle.png" alt="help-circle" />
+          <img
+            class="help-icon"
+            src="assets/help-circle.png"
+            alt="help-circle"
+          />
         </p>
         <p>
-          <img class= "login-icon" src="assets/user.png" alt="user" />
+          <img class="login-icon" src="assets/user.png" alt="user" />
         </p>
         <p>
-          <img class = "ranking-icon" src="assets/rankings.png" alt="rankings" />
+          <img class="ranking-icon" src="assets/rankings.png" alt="rankings" />
         </p>
       </div>
     </div>
