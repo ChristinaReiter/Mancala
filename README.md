@@ -4,9 +4,9 @@
 
 ### Via production server
 
-node server.js
+node index.js
 
-### Via dev server (with hot reloading
+### Via dev server (with hot reloading)
 
 node devServer.js
 
