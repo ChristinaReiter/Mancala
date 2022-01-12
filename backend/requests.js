@@ -12,13 +12,24 @@ module.exports.handleBackendRequest = (req, res) => {
 };
 
 async function handleRegisterUser(req, res) {
-  // TODO check for request type and correct parameters and return 400 if argument is missing
   const data = await parseData(req);
-  console.log(data);
+  // TODO check for request type and correct parameters and return 400 if argument is missing
+  if (
+    !checkParameterExists(data, "username", "string") ||
+    !checkParameterExists(data, "password", "string")
+  ) {
+    res.writeHead(400, { "Content-Type": "application/json" });
+    res.end(
+      '{ "error": "Request body should contain attributes username and password"}}'
+    );
+    return;
+  }
+
   const registeredSuccessfully = database.registerUser(
     data.username,
     data.password
   );
+
   if (!registeredSuccessfully) {
     res.writeHead(401, { "Content-Type": "application/json" });
     res.end('{ "error": "User registered with a different password"}}');
@@ -46,4 +57,8 @@ async function parseData(req) {
 
   const data = Buffer.concat(buffers).toString();
   return JSON.parse(data);
+}
+
+function checkParameterExists(data, name, type) {
+  return typeof data[name] == type;
 }
