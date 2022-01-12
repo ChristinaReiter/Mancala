@@ -2,10 +2,10 @@ const fs = require("fs");
 const path = require("path");
 const hashing = require("./hashing.js");
 
-const userFile = path.join(__dirname, ".storage/users.json");
+const userFile = path.join(__dirname, ".storage/users.txt");
 let users = null;
 
-const rankingFile = path.join(__dirname, ".storage/ranking.json");
+const rankingFile = path.join(__dirname, ".storage/ranking.txt");
 let ranking = null;
 const initialRankingData = [
   { nick: "jpleal", victories: 2, games: 2 },
@@ -13,31 +13,25 @@ const initialRankingData = [
 ];
 
 checkForFile(userFile, function () {
-  fs.readFile(
-    path.join(__dirname, ".storage/users.json"),
-    function (err, data) {
-      if (!err) {
-        users = JSON.parse(data.toString());
-      } else {
-        console.error("Error reading users.json", err);
-      }
+  fs.readFile(userFile, function (err, data) {
+    if (!err) {
+      users = JSON.parse(data.toString());
+    } else {
+      console.error("Error reading users.txt", err);
     }
-  );
+  });
 });
 
 checkForFile(
   rankingFile,
   function () {
-    fs.readFile(
-      path.join(__dirname, ".storage/ranking.json"),
-      function (err, data) {
-        if (!err) {
-          ranking = JSON.parse(data.toString());
-        } else {
-          console.error("Error reading ranking.json", err);
-        }
+    fs.readFile(rankingFile, function (err, data) {
+      if (!err) {
+        ranking = JSON.parse(data.toString());
+      } else {
+        console.error("Error reading ranking.txt", err);
       }
-    );
+    });
   },
   initialRankingData
 );
