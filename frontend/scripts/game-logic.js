@@ -75,6 +75,7 @@ export default class GameLogic {
     updateHoleAndWarehouseScores();
     displayWarehouseSeeds();
     displayHoleSeeds();
+    displayMessage(0);
     if (this.winner !== -1) {
       console.log(
         `Gamemaster: We have a winner. Congrats player <${this.winner}>`
@@ -86,6 +87,7 @@ export default class GameLogic {
   }
 
   async executeAiMove() {
+    displayMessage(1);
     console.log("AI: Thinking about my next move");
     // TODO use better AI function
     setTimeout(() => {
@@ -123,6 +125,7 @@ export default class GameLogic {
       updateHoleAndWarehouseScores();
       displayWarehouseSeeds();
       displayHoleSeeds();
+      displayMessage(0);
       if (this.winner !== -1) {
         console.log(
           `Gamemaster: We have a winner. Congrats player <${this.winner}>`
@@ -300,5 +303,16 @@ export default class GameLogic {
       a[j] = x;
     }
     return a;
+  }
+}
+
+
+//Message-Panel
+export function displayMessage(turn) {
+  if (turn == 0) {
+    document.getElementById("messagepanel").innerHTML= "Your turn.";
+  } 
+  else {
+    document.getElementById("messagepanel").innerHTML = "The other one's turn.";
   }
 }

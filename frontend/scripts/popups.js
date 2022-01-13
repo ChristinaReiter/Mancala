@@ -19,9 +19,13 @@ let loginDisplay = document.querySelector(".login-overlay");
 let loginicon = document.querySelector(".login-icon");
 let loginbutton = document.querySelector(".login-button");
 let logincancelbutton = document.querySelector(".login-cancel-button");
-let username = document.getElementsByName("username")
-let usernamevalue = username.value
+let logoutcancelbutton = document.querySelector(".logout-cancel-button");
+let username = document.getElementById("username");
+let password = document.getElementById("password");
+let logoutbutton = document.querySelector(".logout-button");
 
+let displayLoginForm = document.querySelector(".login-container");
+let displayLogout = document.querySelector(".logout-container");
 
 
 loginicon.addEventListener("click",function() {
@@ -30,12 +34,26 @@ loginicon.addEventListener("click",function() {
 
 loginbutton.addEventListener("click",function() {
     loginDisplay.setAttribute("style", "display: none");
-
+    displayLoginForm.setAttribute("style", "display: none");
+    displayLogout.setAttribute("style", "display: list-item");
 },false);
+
+logoutbutton.addEventListener("click",function() {
+    loginDisplay.setAttribute("style", "display: none");
+    displayLoginForm.setAttribute("style", "display: list-item");
+    displayLogout.setAttribute("style", "display: none");
+},false);
+
 
 logincancelbutton.addEventListener("click",function() {
     loginDisplay.setAttribute("style", "display: none");
 },false);
+
+logoutcancelbutton.addEventListener("click",function() {
+    loginDisplay.setAttribute("style", "display: none");
+},false);
+
+
 
 //Ranking Popup
 

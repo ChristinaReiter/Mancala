@@ -89,14 +89,22 @@
     <div class="login-overlay">
       <div class="central-popup">
         <div class="popup-text popup-title">Login</div>
-        <div class="login-container">
-          <div class="popup-text">Name:</div>
-          <input type="text" name="username" value="" />
-          <div class="popup-text">Password:</div>
-          <input type="text" name="password" value="" />
-          <div class="login-button-container">
-            <button class="login-button">Save</button>
-            <button class="login-cancel-button">Cancel</button>
+          <div class="login-container">
+            <div class="popup-text">Name:</div>
+            <input type="text" id= "username" name="username"  />
+            <div class="popup-text">Password:</div>
+            <input type="text" id = "username" name="password" />
+            <div class="login-button-container">
+              <button class="login-button">Login</button>
+              <button class="login-cancel-button">Cancel</button>
+            </div>
+          </div>
+          <div class="logout-container">
+            <div class="popup-text">You are logged in.</div>
+            <div class="logout-button-container">
+              <button class="logout-button">Logout</button>
+              <button class="logout-cancel-button">Cancel</button>
+            </div>
           </div>
         </div>
       </div>
@@ -206,6 +214,8 @@
           <img class="ranking-icon" src="assets/rankings.png" alt="rankings" />
         </p>
       </div>
+      <!-- Message Panel -->
+      <div id = "messagepanel" class="popup-text messagepanel">Welcome.</div>
     </div>
     <!-- loading of js scripts -->
     <script type="module" src="scripts/settings.js"></script>

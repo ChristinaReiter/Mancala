@@ -94,13 +94,19 @@
   margin-top: 20px;
 }
 
+.logout-cancel-button {
+  position: relative;
+  margin-top: 20px;
+}
+
 .login-button {
   position: relative;
   margin-top: 20px;
 }
 
-.login-container {
-  padding: 10px;
+.logout-button {
+  position: relative;
+  margin-top: 20px;
 }
 
 .login-overlay {
@@ -112,6 +118,16 @@
   border: 1px solid #000000;
   box-sizing: border-box;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.login-container {
+  margin-top: 20px;
+  display: list-item;
+}
+
+.logout-container {
+  margin-top: 20px;
+  display: none;
 }
 
 .ranking-button {
