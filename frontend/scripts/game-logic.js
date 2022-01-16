@@ -10,7 +10,12 @@ import {
   isOpponentMoveValid,
 } from "./game-utils/move-validity.js";
 import { countSeeds } from "./game-utils/seed-counting.js";
-import { GameStatus, PlayStyle } from "./enums/enums.js";
+import {
+  Actor,
+  DistributeHoleEvent,
+  GameStatus,
+  PlayStyle,
+} from "./enums/enums.js";
 
 export default class GameLogic {
   initialSeedsPerHole = numberOfSeeds;
@@ -36,6 +41,7 @@ export default class GameLogic {
     this.opponentHolesIndex = numberOfHoles / 2;
     this.holes = new Array(numberOfHoles).fill(this.initialSeedsPerHole);
     this.totalSeeds = numberOfHoles * this.initialSeedsPerHole;
+    // this.holes = [1, 2, 1, 1, 1, 1];
     this.warehouses = new Array(2).fill(0);
     this.gameStatus =
       playerStartIndex === 0
@@ -58,7 +64,10 @@ export default class GameLogic {
       return;
     }
     console.log(`Player: Making a move on hole <${holeIndex}>`);
-    const lastFilledHoleIndex = this.emptyHole(holeIndex);
+    const { lastFilledHoleIndex, distributeHoleEvent } = this.distributeSeeds(
+      holeIndex,
+      Actor.PLAYER
+    );
     if (lastFilledHoleIndex === null) {
       console.log("AI: Something went wrong emptying the holes...");
       return;
@@ -68,8 +77,11 @@ export default class GameLogic {
     updateHoleAndWarehouseScores();
     displayWarehouseSeeds();
     displayHoleSeeds();
-    this.gameStatus = GameStatus.WAITING_FOR_OPPONENT;
-    if (this.playStyle === PlayStyle.OFFLINE) this.executeAiMove();
+    // TODO
+    if (distributeHoleEvent !== DistributeHoleEvent.IN_OWN_WAREHOUSE) {
+      this.gameStatus = GameStatus.WAITING_FOR_OPPONENT;
+      if (this.playStyle === PlayStyle.OFFLINE) this.executeAiMove();
+    }
   }
 
   async executeAiMove() {
@@ -98,7 +110,10 @@ export default class GameLogic {
         console.log("AI: My chosen move was invalid. Stopping.");
         return;
       }
-      const lastFilledHoleIndex = this.emptyHole(holeIndex);
+      const { lastFilledHoleIndex, distributeHoleEvent } = this.distributeSeeds(
+        holeIndex,
+        Actor.OPPONENT
+      );
       if (lastFilledHoleIndex === null) {
         console.log("AI: Something went wrong emptying the holes...");
         return;
@@ -116,7 +131,11 @@ export default class GameLogic {
         console.log(`Gamemaster: We have a winner: <${this.gameStatus}>`);
         return;
       }
-      this.gameStatus = GameStatus.WAITING_FOR_PLAYER;
+      if (distributeHoleEvent !== DistributeHoleEvent.IN_OWN_WAREHOUSE) {
+        this.gameStatus = GameStatus.WAITING_FOR_PLAYER;
+      } else {
+        this.executeAiMove();
+      }
     }, 3000);
   }
 
@@ -139,7 +158,8 @@ export default class GameLogic {
   }
 
   // empties selected hole, returns index of last filled hole OR null on invalid hole index
-  emptyHole(holeIndex) {
+  // returns: {lastFilledHoleIndex, distributeHoleEvent}
+  distributeSeeds(holeIndex, actor) {
     if (holeIndex >= this.holes.length || holeIndex < 0) {
       console.warn(`emptyHole: called with invalid holeIndex <${holeIndex}>`);
       return;
@@ -152,15 +172,35 @@ export default class GameLogic {
     }
     // empty selected hole
     this.holes[holeIndex] = 0;
+    // temporarily merge holes and warehouses for seed distribution
+    const { mergedArray, actorWarehouseIndex } =
+      this.mergeHolesAndWarehouses(actor);
     // fill next holes
     for (let i = 1; i <= holeValue; i++) {
       // module will prevent array overflow
-      const targetHoleIndex = (holeIndex + i) % this.holes.length;
-      this.holes[targetHoleIndex] = this.holes[targetHoleIndex] + 1;
+      const targetHoleIndex = (holeIndex + i) % mergedArray.length;
+      mergedArray[targetHoleIndex] = mergedArray[targetHoleIndex] + 1;
     }
-    const lastFilledHoleIndex = (holeIndex + holeValue) % this.holes.length;
+    const lastFilledHoleIndex = (holeIndex + holeValue) % mergedArray.length;
     console.log("emptyHole returning", lastFilledHoleIndex);
-    return lastFilledHoleIndex;
+    const { updatedHoles, updatedWarehouse } = this.divideMergedArray({
+      mergedArray,
+      actor,
+      actorWarehouseIndex,
+    });
+    this.holes = updatedHoles;
+    if (actor === Actor.PLAYER) {
+      this.warehouses[0] = updatedWarehouse;
+    } else {
+      this.warehouses[1] = updatedWarehouse;
+    }
+    let distributeHoleEvent;
+    if (lastFilledHoleIndex === actorWarehouseIndex) {
+      distributeHoleEvent = DistributeHoleEvent.IN_OWN_WAREHOUSE;
+    }
+    console.log("holes", this.holes);
+    console.log("warehouses", this.warehouses);
+    return { lastFilledHoleIndex, distributeHoleEvent };
   }
 
   checkGameOver() {
@@ -245,5 +285,38 @@ export default class GameLogic {
       a[j] = x;
     }
     return a;
+  }
+
+  mergeHolesAndWarehouses(actor) {
+    let actorWarehouseIndex;
+    let mergedArray = this.holes.slice(0, this.opponentHolesIndex);
+    if (actor === Actor.PLAYER) {
+      actorWarehouseIndex = mergedArray.length;
+      mergedArray.push(this.warehouses[0]);
+    }
+    mergedArray = mergedArray.concat(
+      this.holes.slice(this.opponentHolesIndex, this.holes.length)
+    );
+    if (actor === Actor.OPPONENT) {
+      actorWarehouseIndex = mergedArray.length;
+      mergedArray.push(this.warehouses[1]);
+    }
+    return { mergedArray, actorWarehouseIndex };
+  }
+
+  //input: {mergedArray, actor, actorWarehouseIndex}
+  divideMergedArray(input) {
+    let updatedHoles = [];
+    let updatedPlayerHoles = input.mergedArray.slice(
+      0,
+      input.actorWarehouseIndex
+    );
+    let updatedOpponentHoles = input.mergedArray.slice(
+      input.actorWarehouseIndex + 1,
+      input.mergedArray.length
+    );
+    updatedHoles = updatedPlayerHoles.concat(updatedOpponentHoles);
+    const updatedWarehouse = input.mergedArray[input.actorWarehouseIndex];
+    return { updatedHoles, updatedWarehouse };
   }
 }

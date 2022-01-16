@@ -144,8 +144,8 @@ function startOrResetGame() {
 }
 
 export function updateHoleAndWarehouseScores() {
-  warehouseScoreLeft.innerHTML = currentGame.warehouses[0];
-  warehouseScoreRight.innerHTML = currentGame.warehouses[1];
+  warehouseScoreRight.innerHTML = currentGame.warehouses[0];
+  warehouseScoreLeft.innerHTML = currentGame.warehouses[1];
   for (let i = 0; i < currentGame.holes.length; i++) {
     const holeScore = document.getElementById(`hole-score-${i}`);
     holeScore.innerHTML = currentGame.holes[i];
@@ -171,8 +171,8 @@ export function displayWarehouseSeeds() {
   let leftWarehouse = document.getElementById("warehouse-ui-left");
   let anzahlWarehouseSeedsLeft = leftWarehouse.childElementCount;
 
-  if (currentGame.warehouses[0] > anzahlWarehouseSeedsLeft) {
-    var countAddSeedsL = currentGame.warehouses[0] - anzahlWarehouseSeedsLeft;
+  if (currentGame.warehouses[1] > anzahlWarehouseSeedsLeft) {
+    var countAddSeedsL = currentGame.warehouses[1] - anzahlWarehouseSeedsLeft;
     for (let i = 0; i < countAddSeedsL; i++) {
       var seedDivL = document.createElement("div");
       seedDivL.className = "seeds";
@@ -184,14 +184,13 @@ export function displayWarehouseSeeds() {
       );
       leftWarehouse.appendChild(seedDivL);
     }
-  } else {
   }
 
   let rightWarehouse = document.getElementById("warehouse-ui-right");
   let anzahlWarehouseSeedsRight = rightWarehouse.childElementCount;
 
-  if (currentGame.warehouses[1] > anzahlWarehouseSeedsRight) {
-    var countAddSeedsR = currentGame.warehouses[1] - anzahlWarehouseSeedsRight;
+  if (currentGame.warehouses[0] > anzahlWarehouseSeedsRight) {
+    var countAddSeedsR = currentGame.warehouses[0] - anzahlWarehouseSeedsRight;
     for (let i = 0; i < countAddSeedsR; i++) {
       var seedDivR = document.createElement("div");
       seedDivR.className = "seeds";
@@ -203,7 +202,6 @@ export function displayWarehouseSeeds() {
       );
       rightWarehouse.appendChild(seedDivR);
     }
-  } else {
   }
 }
 

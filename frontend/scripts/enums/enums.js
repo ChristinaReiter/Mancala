@@ -10,3 +10,12 @@ export class GameStatus {
   static WAITING_FOR_PLAYER = "WAITING_FOR_PLAYER";
   static WAITING_FOR_OPPONENT = "WAITING_FOR_OPPONENT";
 }
+
+export class Actor {
+  static PLAYER = "PLAYER";
+  static OPPONENT = "OPPONENT";
+}
+
+export class DistributeHoleEvent {
+  static IN_OWN_WAREHOUSE = "IN_OWN_WAREHOUSE";
+}
