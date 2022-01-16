@@ -6,6 +6,7 @@ export class PlayStyle {
 export class GameStatus {
   static PLAYER_WON = "PLAYER_WON";
   static OPPONENT_WON = "OPPONENT_WON";
+  static DRAW = "DRAW";
   static WAITING_FOR_PLAYER = "WAITING_FOR_PLAYER";
   static WAITING_FOR_OPPONENT = "WAITING_FOR_OPPONENT";
 }

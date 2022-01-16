@@ -9,10 +9,7 @@ import {
   isPlayerMoveValid,
   isOpponentMoveValid,
 } from "./game-utils/move-validity.js";
-import {
-  countSeeds,
-  canSeedsBeMovedToWarehouse,
-} from "./game-utils/seed-counting.js";
+import { countSeeds } from "./game-utils/seed-counting.js";
 import { GameStatus, PlayStyle } from "./enums/enums.js";
 
 export default class GameLogic {
@@ -71,14 +68,6 @@ export default class GameLogic {
     updateHoleAndWarehouseScores();
     displayWarehouseSeeds();
     displayHoleSeeds();
-    if (
-      this.gameStatus === GameStatus.PLAYER_WON ||
-      this.gameStatus === GameStatus.OPPONENT_WON
-    ) {
-      console.log(`Gamemaster: We have a winner: ${this.gameStatus}>`);
-      updateWinner(this.gameStatus);
-      return;
-    }
     this.gameStatus = GameStatus.WAITING_FOR_OPPONENT;
     if (this.playStyle === PlayStyle.OFFLINE) this.executeAiMove();
   }
@@ -147,22 +136,6 @@ export default class GameLogic {
       );
       return;
     }
-    const warehouseIndex = isOpponent ? 1 : 0;
-    for (let i = lastFilledHoleIndex; i >= lowerIndex; i--) {
-      let seedsFromHole = this.holes[i];
-      console.log(`Gamemaster: Hole <${i}> now has <${this.holes[i]}> seeds.`);
-      if (canSeedsBeMovedToWarehouse(seedsFromHole)) {
-        console.log(
-          `Gamemaster: <${seedsFromHole}> seeds from hole <${i}> can be moved to warehouse <${warehouseIndex}>`
-        );
-        this.warehouses[warehouseIndex] =
-          this.warehouses[warehouseIndex] + seedsFromHole;
-        this.holes[i] = 0;
-        console.log("Gamemaster: New warehouse scores:", this.warehouses);
-      } else {
-        break;
-      }
-    }
   }
 
   // empties selected hole, returns index of last filled hole OR null on invalid hole index
@@ -198,72 +171,42 @@ export default class GameLogic {
         "Gamemaster: Game is over because player has enough seeds to win."
       );
       // opponents has enough seeds in his / her  warehouse
-    } else if (this.warehouses[1] >= this.seedsToWin) {
+    }
+    if (this.warehouses[1] >= this.seedsToWin) {
       this.gameStatus = GameStatus.OPPONENT_WON;
       console.log(
         "Gamemaster: Game is over because opponent has enough seeds to win."
       );
-    } else {
-      const playerTotalSeeds = countSeeds(
-        false,
-        this.holes,
-        this.opponentHolesIndex
+    }
+    // check if player has 0 seeds in his holes
+    const playerTotalSeeds = countSeeds(
+      false,
+      this.holes,
+      this.opponentHolesIndex
+    );
+    const opponentTotalSeeds = countSeeds(
+      true,
+      this.holes,
+      this.opponentHolesIndex
+    );
+    if (playerTotalSeeds === 0 || opponentTotalSeeds === 0) {
+      console.log(
+        "Gamemaster: Game is over because player/opponent has 0 seeds in his holes."
       );
-      const opponentTotalSeeds = countSeeds(
-        true,
-        this.holes,
-        this.opponentHolesIndex
-      );
-      let gameIsOver = false;
-      // player has no seeds in his holes and opponent can not make any move that would change that
-      if (playerTotalSeeds === 0) {
-        gameIsOver = true;
-        for (let i = 0; i < this.opponentHolesIndex; i++) {
-          if (
-            isPlayerMoveValid(
-              i,
-              this.holes,
-              this.opponentHolesIndex,
-              this.gameStatus
-            )
-          ) {
-            gameIsOver = false;
-            break;
-          }
-          if (gameIsOver) {
-            console.log(
-              "Gamemaster: Game is over because player has no seeds in his holes and opponent can not make any move that would change that."
-            );
-          }
-        }
-        // opponent has no seeds in his holes and player can not make any move that would change that
-      } else if (opponentTotalSeeds === 0) {
-        gameIsOver = true;
-        for (let i = this.opponentHolesIndex; i < this.holes.length; i++) {
-          if (
-            isOpponentMoveValid(
-              i,
-              this.holes,
-              this.opponentHolesIndex,
-              this.gameStatus
-            )
-          ) {
-            gameIsOver = false;
-            break;
-          }
-          if (gameIsOver) {
-            console.log(
-              "Gamemaster: Game is over because opponent has no seeds in his holes and player can not make any move that would change that."
-            );
-          }
-        }
-      }
-      if (gameIsOver) {
-        this.gameStatus =
-          this.warehouses[0] >= this.warehouses[1]
-            ? GameStatus.PLAYER_WON
-            : GameStatus.OPPONENT_WON;
-      }
+      this.gameStatus =
+        this.warehouses[0] > this.warehouses[1]
+          ? GameStatus.PLAYER_WON
+          : this.warehouses[0] < this.warehouses[1]
+          ? GameStatus.OPPONENT_WON
+          : GameStatus.DRAW;
+    }
+    if (
+      this.gameStatus !== GameStatus.WAITING_FOR_PLAYER &&
+      this.gameStatus !== GameStatus.WAITING_FOR_OPPONENT
+    ) {
+      console.log(`Gamemaster: We have a result: ${this.gameStatus}>`);
+      updateWinner(this.gameStatus);
+      return;
     }
   }
 

@@ -159,6 +159,9 @@ export function updateWinner(gameStatus) {
   } else if (gameStatus === GameStatus.OPPONENT_WON) {
     winnerElem.setAttribute("style", "display: block;");
     winnerTextElem.innerText = "YOU LOST :(";
+  } else if (gameStatus === GameStatus.DRAW) {
+    winnerElem.setAttribute("style", "display: block;");
+    winnerTextElem.innerText = "DRAW!";
   } else {
     winnerElem.setAttribute("style", "display: none;");
   }
