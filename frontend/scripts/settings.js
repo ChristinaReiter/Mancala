@@ -1,3 +1,4 @@
+import { GameStatus, PlayStyle } from "./enums/enums.js";
 import GameLogic from "./game-logic.js";
 
 // constants for settings
@@ -68,9 +69,9 @@ function updateNumberOfHoles() {
 function startOrResetGame() {
   startGameOverlayElem.setAttribute("style", "display: none;");
   // hide winner popup
-  updateWinner(-1);
+  updateWinner(GameStatus.WAITING_FOR_PLAYER);
   // TODO integrate multiplayer option
-  currentGame = new GameLogic(1, 0, numberOfHoles);
+  currentGame = new GameLogic(PlayStyle.OFFLINE, 0, numberOfHoles);
 
   // set warehouse scores to 0
   warehouseScoreLeft.innerHTML = 0;
@@ -151,14 +152,14 @@ export function updateHoleAndWarehouseScores() {
   }
 }
 
-export function updateWinner(winnerIndex) {
-  if (winnerIndex === 0) {
+export function updateWinner(gameStatus) {
+  if (gameStatus === GameStatus.PLAYER_WON) {
     winnerElem.setAttribute("style", "display: block;");
     winnerTextElem.innerText = "YOU WON!";
-  } else if (winnerIndex === 1) {
+  } else if (gameStatus === GameStatus.OPPONENT_WON) {
     winnerElem.setAttribute("style", "display: block;");
     winnerTextElem.innerText = "YOU LOST :(";
-  } else if (winnerIndex === -1) {
+  } else {
     winnerElem.setAttribute("style", "display: none;");
   }
 }

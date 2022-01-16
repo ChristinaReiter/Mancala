@@ -13,12 +13,13 @@ import {
   countSeeds,
   canSeedsBeMovedToWarehouse,
 } from "./game-utils/seed-counting.js";
+import { GameStatus, PlayStyle } from "./enums/enums.js";
 
 export default class GameLogic {
   initialSeedsPerHole = numberOfSeeds;
   seedsToWin = 24;
-  // game against AI --> 1, game against another player 2;
-  numberOfPlayers;
+  // either PlaySyle.OFFLINE or PlayStyle.ONLINE
+  playStyle;
   // is it the controlling players turn: true / false
   isPlayersTurn;
   // number of total seeds in the game, always four seeds per hole initially
@@ -32,21 +33,17 @@ export default class GameLogic {
   // one dimensional arrays that holds the number of seeds for each warehouse
   // has fixed length two: [0] --> warehouse of the controlling player, [1] --> warehouse of the opponent
   warehouses;
-  // determines if game already has a winner and who it is
-  // -1 --> game is active
-  // 0 --> player won
-  // 1 --> opponent won
-  winner;
+  // PLAYER_WON / OPPONENT_WON / WAITING_FOR_PLAYER / WAITING_FOR_OPPONENT
+  gameStatus;
 
-  // TODO check input for flawed parameters
-  constructor(numberOfPlayers, playerStartIndex, numberOfHoles) {
-    this.numberOfPlayers = numberOfPlayers;
+  constructor(playStyle, playerStartIndex, numberOfHoles) {
+    this.playStyle = playStyle;
     this.isPlayersTurn = playerStartIndex === 0 ? true : false;
     this.opponentHolesIndex = numberOfHoles / 2;
     this.holes = new Array(numberOfHoles).fill(this.initialSeedsPerHole);
     this.totalSeeds = numberOfHoles * this.initialSeedsPerHole;
     this.warehouses = new Array(2).fill(0);
-    this.winner = -1;
+    this.gameStatus = GameStatus.WAITING_FOR_PLAYER;
   }
 
   executePlayerMove(holeIndex) {
@@ -75,14 +72,16 @@ export default class GameLogic {
     updateHoleAndWarehouseScores();
     displayWarehouseSeeds();
     displayHoleSeeds();
-    if (this.winner !== -1) {
-      console.log(
-        `Gamemaster: We have a winner. Congrats player <${this.winner}>`
-      );
-      updateWinner(this.winner);
+    if (
+      this.gameStatus === GameStatus.PLAYER_WON ||
+      this.gameStatus === GameStatus.OPPONENT_WON
+    ) {
+      console.log(`Gamemaster: We have a winner: ${this.gameStatus}>`);
+      updateWinner(this.gameStatus);
       return;
     }
-    if (this.numberOfPlayers === 1) this.executeAiMove();
+    this.gameStatus = GameStatus.WAITING_FOR_OPPONENT;
+    if (this.playStyle === PlayStyle.OFFLINE) this.executeAiMove();
   }
 
   async executeAiMove() {
@@ -94,9 +93,9 @@ export default class GameLogic {
         console.log("AI: Sorry I can't do anything here :(");
         return;
       }
-      if (this.numberOfPlayers !== 1) {
+      if (this.playStyle != PlayStyle.OFFLINE) {
         console.log(
-          "AI: There is more than 1 player, what am i supposed to do here?"
+          "AI: This is an online game, what am i supposed to do here?"
         );
         return;
       }
@@ -123,10 +122,11 @@ export default class GameLogic {
       updateHoleAndWarehouseScores();
       displayWarehouseSeeds();
       displayHoleSeeds();
-      if (this.winner !== -1) {
-        console.log(
-          `Gamemaster: We have a winner. Congrats player <${this.winner}>`
-        );
+      if (
+        this.gameStatus === GameStatus.OPPONENT_WON ||
+        this.gameStatus === GameStatus.PLAYER_WON
+      ) {
+        console.log(`Gamemaster: We have a winner: <${this.gameStatus}>`);
         return;
       }
     }, 3000);
@@ -194,13 +194,13 @@ export default class GameLogic {
   checkGameOver() {
     // player has enough seeds in his / her warehouse
     if (this.warehouses[0] >= this.seedsToWin) {
-      this.winner = 0;
+      this.gameStatus = GameStatus.PLAYER_WON;
       console.log(
         "Gamemaster: Game is over because player has enough seeds to win."
       );
       // opponents has enough seeds in his / her  warehouse
     } else if (this.warehouses[1] >= this.seedsToWin) {
-      this.winner = 1;
+      this.gameStatus = GameStatus.OPPONENT_WON;
       console.log(
         "Gamemaster: Game is over because opponent has enough seeds to win."
       );
@@ -260,7 +260,10 @@ export default class GameLogic {
         }
       }
       if (gameIsOver) {
-        this.winner = this.warehouses[0] >= this.warehouses[1] ? 0 : 1;
+        this.gameStatus =
+          this.warehouses[0] >= this.warehouses[1]
+            ? GameStatus.PLAYER_WON
+            : GameStatus.OPPONENT_WON;
       }
     }
   }
