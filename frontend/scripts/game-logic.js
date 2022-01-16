@@ -20,8 +20,6 @@ export default class GameLogic {
   seedsToWin = 24;
   // either PlaySyle.OFFLINE or PlayStyle.ONLINE
   playStyle;
-  // is it the controlling players turn: true / false
-  isPlayersTurn;
   // number of total seeds in the game, always four seeds per hole initially
   totalSeeds;
   // one dimensional array that holds the number of seeds for each hole
@@ -38,12 +36,14 @@ export default class GameLogic {
 
   constructor(playStyle, playerStartIndex, numberOfHoles) {
     this.playStyle = playStyle;
-    this.isPlayersTurn = playerStartIndex === 0 ? true : false;
     this.opponentHolesIndex = numberOfHoles / 2;
     this.holes = new Array(numberOfHoles).fill(this.initialSeedsPerHole);
     this.totalSeeds = numberOfHoles * this.initialSeedsPerHole;
     this.warehouses = new Array(2).fill(0);
-    this.gameStatus = GameStatus.WAITING_FOR_PLAYER;
+    this.gameStatus =
+      playerStartIndex === 0
+        ? GameStatus.WAITING_FOR_PLAYER
+        : GameStatus.WAITING_FOR_OPPONENT;
   }
 
   executePlayerMove(holeIndex) {
@@ -52,7 +52,7 @@ export default class GameLogic {
         holeIndex,
         this.holes,
         this.opponentHolesIndex,
-        this.isPlayersTurn
+        this.gameStatus
       )
     ) {
       console.log(
@@ -67,7 +67,6 @@ export default class GameLogic {
       return;
     }
     this.moveSeedsToWarehouse(lastFilledHoleIndex, false);
-    this.isPlayersTurn = false;
     this.checkGameOver();
     updateHoleAndWarehouseScores();
     displayWarehouseSeeds();
@@ -104,7 +103,7 @@ export default class GameLogic {
           holeIndex,
           this.holes,
           this.opponentHolesIndex,
-          this.isPlayersTurn
+          this.gameStatus
         )
       ) {
         console.log("AI: My chosen move was invalid. Stopping.");
@@ -117,7 +116,6 @@ export default class GameLogic {
       }
       this.moveSeedsToWarehouse(lastFilledHoleIndex, true);
       console.log(`AI: Finished my move on hole <${holeIndex}> 😎`);
-      this.isPlayersTurn = true;
       this.checkGameOver();
       updateHoleAndWarehouseScores();
       displayWarehouseSeeds();
@@ -129,6 +127,7 @@ export default class GameLogic {
         console.log(`Gamemaster: We have a winner: <${this.gameStatus}>`);
         return;
       }
+      this.gameStatus = GameStatus.WAITING_FOR_PLAYER;
     }, 3000);
   }
 
@@ -225,7 +224,7 @@ export default class GameLogic {
               i,
               this.holes,
               this.opponentHolesIndex,
-              this.isPlayersTurn
+              this.gameStatus
             )
           ) {
             gameIsOver = false;
@@ -246,7 +245,7 @@ export default class GameLogic {
               i,
               this.holes,
               this.opponentHolesIndex,
-              this.isPlayersTurn
+              this.gameStatus
             )
           ) {
             gameIsOver = false;
@@ -284,7 +283,7 @@ export default class GameLogic {
           selectedMove,
           this.holes,
           this.opponentHolesIndex,
-          this.isPlayersTurn
+          this.gameStatus
         )
       ) {
         return selectedMove;

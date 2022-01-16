@@ -1,3 +1,4 @@
+import { GameStatus } from "../enums/enums.js";
 import {
   countSeeds,
   countPotentialSeeds,
@@ -8,14 +9,14 @@ export function isPlayerMoveValid(
   holeIndex,
   allHoles,
   opponentHolesIndex,
-  isPlayersTurn
+  gameStatus
 ) {
   // check for invalid hole index
   if (holeIndex >= opponentHolesIndex || holeIndex < 0) {
     return false;
   }
   // check if it's the players turn
-  if (!isPlayersTurn) return false;
+  if (gameStatus !== GameStatus.WAITING_FOR_PLAYER) return false;
   // check if all of the opponent's holes are empty, if yes check that the move will fill at least one of them
   let totalOpponentSeeds = countSeeds(true, allHoles, opponentHolesIndex);
   if (totalOpponentSeeds === 0) {
@@ -64,7 +65,7 @@ export function isOpponentMoveValid(
   holeIndex,
   allHoles,
   opponentHolesIndex,
-  isPlayersTurn
+  gameStatus
 ) {
   // check for invalid hole index
   if (holeIndex < opponentHolesIndex || holeIndex >= allHoles.length) {
@@ -73,7 +74,7 @@ export function isOpponentMoveValid(
   // check if the hole is empty
   if (allHoles[holeIndex] === 0) return false;
   // check if it's the players turn
-  if (isPlayersTurn) return false;
+  if (gameStatus !== GameStatus.WAITING_FOR_OPPONENT) return false;
   // check if all of the player's holes are empty, if yes check that the move will fill at least one of them
   let totalPlayerSeeds = countSeeds(false, allHoles, opponentHolesIndex);
   if (totalPlayerSeeds === 0) {
