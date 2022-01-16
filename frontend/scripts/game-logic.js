@@ -41,7 +41,7 @@ export default class GameLogic {
     this.opponentHolesIndex = numberOfHoles / 2;
     this.holes = new Array(numberOfHoles).fill(this.initialSeedsPerHole);
     this.totalSeeds = numberOfHoles * this.initialSeedsPerHole;
-    // this.holes = [1, 2, 1, 1, 1, 1];
+    //this.holes = [0, 1, 5, 5, 1, 3];
     this.warehouses = new Array(2).fill(0);
     this.gameStatus =
       playerStartIndex === 0
@@ -71,14 +71,29 @@ export default class GameLogic {
     if (lastFilledHoleIndex === null) {
       console.log("AI: Something went wrong emptying the holes...");
       return;
+      // move ended on own empty hole
+    } else if (
+      lastFilledHoleIndex < this.opponentHolesIndex &&
+      this.holes[lastFilledHoleIndex] === 1
+    ) {
+      const oppositeHoleIndex =
+        this.opponentHolesIndex -
+        1 +
+        (this.opponentHolesIndex - lastFilledHoleIndex);
+      // + 1 because of the seed in the own hole
+      const seedsToMove = this.holes[oppositeHoleIndex] + 1;
+      this.holes[lastFilledHoleIndex] = 0;
+      this.holes[oppositeHoleIndex] = 0;
+      this.warehouses[0] = this.warehouses[0] + seedsToMove;
     }
-    this.moveSeedsToWarehouse(lastFilledHoleIndex, false);
     this.checkGameOver();
     updateHoleAndWarehouseScores();
     displayWarehouseSeeds();
     displayHoleSeeds();
-    // TODO
-    if (distributeHoleEvent !== DistributeHoleEvent.IN_OWN_WAREHOUSE) {
+    if (
+      this.gameStatus === GameStatus.WAITING_FOR_PLAYER &&
+      distributeHoleEvent !== DistributeHoleEvent.IN_OWN_WAREHOUSE
+    ) {
       this.gameStatus = GameStatus.WAITING_FOR_OPPONENT;
       if (this.playStyle === PlayStyle.OFFLINE) this.executeAiMove();
     }
@@ -117,8 +132,21 @@ export default class GameLogic {
       if (lastFilledHoleIndex === null) {
         console.log("AI: Something went wrong emptying the holes...");
         return;
+      } else if (
+        lastFilledHoleIndex >= this.opponentHolesIndex &&
+        this.holes[lastFilledHoleIndex] === 1
+      ) {
+        const oppositeHoleIndex =
+          this.opponentHolesIndex -
+          1 -
+          (lastFilledHoleIndex - this.opponentHolesIndex);
+        // + 1 because of the seed in the own hole
+        const seedsToMove = this.holes[oppositeHoleIndex] + 1;
+        this.holes[lastFilledHoleIndex] = 0;
+        this.holes[oppositeHoleIndex] = 0;
+        this.warehouses[1] = this.warehouses[1] + seedsToMove;
       }
-      this.moveSeedsToWarehouse(lastFilledHoleIndex, true);
+
       console.log(`AI: Finished my move on hole <${holeIndex}> 😎`);
       this.checkGameOver();
       updateHoleAndWarehouseScores();
@@ -137,24 +165,6 @@ export default class GameLogic {
         this.executeAiMove();
       }
     }, 3000);
-  }
-
-  moveSeedsToWarehouse(lastFilledHoleIndex, isOpponent) {
-    // lower index for player is lowest opponent hole index and vice versa
-    const lowerIndex = isOpponent ? 0 : this.opponentHolesIndex;
-    // upper index for player is the highest opponent hole index and vice versa
-    const upperIndex = isOpponent
-      ? this.opponentHolesIndex - 1
-      : this.holes.length - 1;
-    if (
-      (isOpponent && lastFilledHoleIndex > upperIndex) ||
-      (!isOpponent && lastFilledHoleIndex < lowerIndex)
-    ) {
-      console.log(
-        `Gamemaster: Move ended on the moving player's own hole. No seeds can be moved`
-      );
-      return;
-    }
   }
 
   // empties selected hole, returns index of last filled hole OR null on invalid hole index
