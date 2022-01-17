@@ -20,6 +20,7 @@ import {
   GameStatus,
   PlayStyle,
 } from "./enums/enums.js";
+import { findRandomAiMove } from "./game-utils/ai.js";
 
 export default class GameLogic {
   initialSeedsPerHole = numberOfSeeds;
@@ -107,7 +108,11 @@ export default class GameLogic {
     console.log("AI: Thinking about my next move");
     // TODO use better AI function
     setTimeout(() => {
-      const holeIndex = this.findRandomAiMove();
+      const holeIndex = findRandomAiMove({
+        opponentHolesIndex: this.opponentHolesIndex,
+        holes: this.holes,
+        gameStatus: this.gameStatus,
+      });
       if (holeIndex === null) {
         console.log("AI: Sorry I can't do anything here :(");
         return;
@@ -282,42 +287,5 @@ export default class GameLogic {
       updateWinner(this.gameStatus);
       return;
     }
-  }
-
-  // simple method that finds the first possible move out of a randomly order of the hole indices
-  // returns hole index or null if no move is possible
-  findRandomAiMove() {
-    const moveArray = [];
-    for (let i = this.opponentHolesIndex; i < this.holes.length; i++) {
-      moveArray.push(i);
-    }
-    const shuffledMoveArray = this.shuffle(moveArray);
-    for (let i = 0; i < shuffledMoveArray.length; i++) {
-      const selectedMove = shuffledMoveArray[i];
-      console.log(`AI: Testing move <${selectedMove}>.`);
-      if (
-        isOpponentMoveValid(
-          selectedMove,
-          this.holes,
-          this.opponentHolesIndex,
-          this.gameStatus
-        )
-      ) {
-        return selectedMove;
-      }
-      console.log(`AI: Move <${selectedMove}> is invalid.`);
-    }
-    return null;
-  }
-
-  shuffle(a) {
-    var j, x, i;
-    for (i = a.length - 1; i > 0; i--) {
-      j = Math.floor(Math.random() * (i + 1));
-      x = a[i];
-      a[i] = a[j];
-      a[j] = x;
-    }
-    return a;
   }
 }
