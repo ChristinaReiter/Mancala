@@ -57,6 +57,10 @@
   margin-top: 20px;
 }
 
+.start-game-popup {
+  display: none;
+}
+
 .hidden-overlay {
   display: none;
 }
@@ -94,16 +98,30 @@
   margin-top: 20px;
 }
 
+.error-login-text {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 42px;
+  color: rgb(156, 25, 25);
+}
+
+.logout-cancel-button {
+  position: relative;
+  margin-top: 20px;
+}
+
 .login-button {
   position: relative;
   margin-top: 20px;
 }
 
-.login-container {
-  padding: 10px;
+.logout-button {
+  position: relative;
+  margin-top: 20px;
 }
 
-.login-overlay {
+.logout-overlay {
   display: none;
   position: fixed;
   width: 100%;
@@ -112,6 +130,20 @@
   border: 1px solid #000000;
   box-sizing: border-box;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.login-container {
+  margin-top: 20px;
+  display: list-item;
+}
+
+.login-overlay {
+  display: list-item;
+  z-index: 10;
+}
+
+.logout-container {
+  margin-top: 20px;
 }
 
 .ranking-button {

@@ -40,7 +40,7 @@
 }
 
 .seeds {
-  position: fixed;
+  position: absolute;
   width: 27px;
   height: 40px;
   background: #3c4484;

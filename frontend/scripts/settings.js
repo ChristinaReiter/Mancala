@@ -96,6 +96,7 @@ function startOrResetGame() {
     holeScoreDiv.id = `hole-score-${i}`;
     holeScoreDiv.innerHTML = currentGame.holes[i];
     holeUiDiv.addEventListener("click", () => {
+      displayBorder(holeUiDiv);
       currentGame.executePlayerMove(i);
       updateHoleAndWarehouseScores();
       displayWarehouseSeeds();
@@ -155,13 +156,13 @@ export function updateHoleAndWarehouseScores() {
 
 export function updateWinner(gameStatus) {
   if (gameStatus === GameStatus.PLAYER_WON) {
-    winnerElem.setAttribute("style", "display: block;");
+    winnerElem.setAttribute("style", "display: block; z-index: 10;");
     winnerTextElem.innerText = "YOU WON!";
   } else if (gameStatus === GameStatus.OPPONENT_WON) {
-    winnerElem.setAttribute("style", "display: block;");
+    winnerElem.setAttribute("style", "display: block; z-index: 10;");
     winnerTextElem.innerText = "YOU LOST :(";
   } else if (gameStatus === GameStatus.DRAW) {
-    winnerElem.setAttribute("style", "display: block;");
+    winnerElem.setAttribute("style", "display: block; z-index: 10;");
     winnerTextElem.innerText = "DRAW!";
   } else {
     winnerElem.setAttribute("style", "display: none;");
@@ -263,4 +264,18 @@ numberOfSeedsMinusElem.addEventListener("click", () => {
 
 function updateNumberOfSeeds() {
   numberOfSeedsDisplayElem.innerHTML = numberOfSeeds;
+}
+
+//Border when selecting a hole
+function displayBorder(elem1) {
+  elem1.setAttribute(
+    "style",
+    "  box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; border: 5px inset #ffffff;"
+  );
+  setTimeout(function () {
+    elem1.removeAttribute(
+      "style",
+      "box-sizing; -moz-box-sizing; -webkit-box-sizing; border;"
+    );
+  }, 2000);
 }

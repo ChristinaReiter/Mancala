@@ -94,6 +94,7 @@ export default class GameLogic {
     updateHoleAndWarehouseScores();
     displayWarehouseSeeds();
     displayHoleSeeds();
+    displayMessage(0);
     if (
       this.gameStatus === GameStatus.WAITING_FOR_PLAYER &&
       distributeHoleEvent !== DistributeHoleEvent.IN_OWN_WAREHOUSE
@@ -104,6 +105,7 @@ export default class GameLogic {
   }
 
   async executeAiMove() {
+    displayMessage(1);
     console.log("AI: Thinking about my next move");
     // TODO use better AI function
     setTimeout(() => {
@@ -159,6 +161,7 @@ export default class GameLogic {
       updateHoleAndWarehouseScores();
       displayWarehouseSeeds();
       displayHoleSeeds();
+      displayMessage(0);
       if (
         this.gameStatus === GameStatus.OPPONENT_WON ||
         this.gameStatus === GameStatus.PLAYER_WON
@@ -285,5 +288,14 @@ export default class GameLogic {
       updateWinner(this.gameStatus);
       return;
     }
+  }
+}
+
+//Message-Panel
+export function displayMessage(turn) {
+  if (turn == 0) {
+    document.getElementById("messagepanel").innerHTML = "Your turn.";
+  } else {
+    document.getElementById("messagepanel").innerHTML = "The other one's turn.";
   }
 }
