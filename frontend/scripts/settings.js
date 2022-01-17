@@ -141,6 +141,7 @@ function startOrResetGame() {
     `display: grid; grid-template-columns: ${gridTemplateColumns}`
   );
   displayHoleSeeds();
+  displayWarehouseSeeds();
 }
 
 export function updateHoleAndWarehouseScores() {
@@ -184,6 +185,11 @@ export function displayWarehouseSeeds() {
       );
       leftWarehouse.appendChild(seedDivL);
     }
+  } else if (currentGame.warehouses[1] < anzahlWarehouseSeedsLeft) {
+    var countDeleteSeeds = anzahlWarehouseSeedsLeft - currentGame.warehouses[1];
+    for (let n = 0; n < countDeleteSeeds; n++) {
+      leftWarehouse.removeChild(leftWarehouse.lastChild);
+    }
   }
 
   let rightWarehouse = document.getElementById("warehouse-ui-right");
@@ -201,6 +207,12 @@ export function displayWarehouseSeeds() {
         `margin-top: ${randomTopR}px; margin-left: ${randomLeftR}px`
       );
       rightWarehouse.appendChild(seedDivR);
+    }
+  } else if (currentGame.warehouses[0] < anzahlWarehouseSeedsRight) {
+    var countDeleteSeeds =
+      anzahlWarehouseSeedsRight - currentGame.warehouses[0];
+    for (let n = 0; n < countDeleteSeeds; n++) {
+      rightWarehouse.removeChild(rightWarehouse.lastChild);
     }
   }
 }
@@ -227,7 +239,6 @@ export function displayHoleSeeds() {
       for (let n = 0; n < countDeleteSeeds; n++) {
         holeIndexed.removeChild(holeIndexed.lastChild);
       }
-    } else {
     }
   }
 }
