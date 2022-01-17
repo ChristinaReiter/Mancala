@@ -5,6 +5,7 @@ export async function getRanking() {
     if (response.status == 200) {
       const result = await response.text();
       console.log("ranking result", result);
+      return result;
     } else {
       console.error(
         "Get ranking responded with",
@@ -35,6 +36,7 @@ export async function registerUser(username, password) {
         response?.status,
         response?.statusText
       );
+      return false;
     }
   } catch (error) {
     console.error("Error registering user", error);

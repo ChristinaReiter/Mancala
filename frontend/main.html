@@ -10,7 +10,7 @@
   </head>
   <body>
     <!-- popups + overlays -->
-        <!-- settings popup -->
+    <!-- settings popup -->
     <div class="start-game-popup dark-overlay" id="start-game-popup">
       <div class="central-popup">
         <div class="popup-text popup-title">LET'S PLAY</div>
@@ -90,12 +90,12 @@
     <div class="logout-overlay">
       <div class="central-popup">
         <div class="popup-text popup-title">Logout</div>
-            <div class="logout-container">
-            <div class="popup-text">You are logged in.</div>
-            <div class="logout-button-container">
-              <button class="logout-button">Logout</button>
-              <button class="logout-cancel-button">Cancel</button>
-            </div>
+        <div class="logout-container">
+          <div class="popup-text">You are logged in.</div>
+          <div class="logout-button-container">
+            <button class="logout-button">Logout</button>
+            <button class="logout-cancel-button">Cancel</button>
+          </div>
         </div>
       </div>
     </div>
@@ -103,25 +103,34 @@
     <div class="login-overlay">
       <div class="central-popup">
         <div class="popup-text popup-title">Login</div>
-          <div class="login-container">
-            <div class="popup-text">Name:</div>
-            <input type="text" id= "username" name="username" />
-            <div class="popup-text">Password:</div>
-            <input type="text" id = "password" name="password" />
-            <div class="login-button-container">
-              <button class="login-button">Login</button>
-            </div>
+        <div class="login-container">
+          <div class="popup-text">Name:</div>
+          <input type="text" id="username" name="username" value="" />
+          <div class="popup-text">Password:</div>
+          <input type="text" id="password" name="password" value="" />
+          <div class="login-button-container">
+            <button class="login-button">Login</button>
           </div>
         </div>
+      </div>
     </div>
     <!-- closed popup-ranking + overlay, by clicking on the '?' -->
     <div class="ranking-overlay">
       <div class="central-popup">
         <div class="popup-text popup-title">Ranking</div>
         <div class="ranking-container">
-          <div class="popup-text">1.</div>
-          <div class="popup-text">2.</div>
-          <div class="popup-text">3.</div>
+          <ol>
+            <li class="popup-text" id="ranking0"></li>
+            <li class="popup-text" id="ranking1"></li>
+            <li class="popup-text" id="ranking2"></li>
+            <li class="popup-text" id="ranking3"></li>
+            <li class="popup-text" id="ranking4"></li>
+            <li class="popup-text" id="ranking5"></li>
+            <li class="popup-text" id="ranking6"></li>
+            <li class="popup-text" id="ranking7"></li>
+            <li class="popup-text" id="ranking8"></li>
+            <li class="popup-text" id="ranking9"></li>
+          </ol>
         </div>
         <button class="ranking-button">Ok</button>
       </div>
@@ -220,7 +229,7 @@
         </p>
       </div>
       <!-- Message Panel -->
-      <div id = "messagepanel" class="popup-text messagepanel">Welcome.</div>
+      <div id="messagepanel" class="popup-text messagepanel">Welcome.</div>
     </div>
     <!-- loading of js scripts -->
     <script type="module" src="scripts/settings.js"></script>

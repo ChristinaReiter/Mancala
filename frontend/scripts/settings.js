@@ -254,15 +254,17 @@ function updateNumberOfSeeds() {
   numberOfSeedsDisplayElem.innerHTML = numberOfSeeds;
 }
 
-
-
 //Border when selecting a hole
-function displayBorder(elem1){
-elem1.setAttribute("style", "  box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; border: 5px inset #ffffff;");
-setTimeout( function() {
-  elem1.removeAttribute("style", "box-sizing; -moz-box-sizing; -webkit-box-sizing; border;");
-  console.log("Hey");
-}, 2000);
+function displayBorder(elem1) {
+  elem1.setAttribute(
+    "style",
+    "  box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; border: 5px inset #ffffff;"
+  );
+  setTimeout(function () {
+    elem1.removeAttribute(
+      "style",
+      "box-sizing; -moz-box-sizing; -webkit-box-sizing; border;"
+    );
+    console.log("Hey");
+  }, 2000);
 }
-
-
