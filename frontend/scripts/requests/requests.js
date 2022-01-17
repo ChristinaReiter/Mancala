@@ -28,6 +28,7 @@ export async function registerUser(username, password) {
     });
     if (response.status == 200) {
       const result = await response.text();
+      return true;
     } else {
       console.error(
         "Register user responded with error",

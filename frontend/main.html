@@ -10,7 +10,8 @@
   </head>
   <body>
     <!-- popups + overlays -->
-    <div class="dark-overlay" id="start-game-popup">
+        <!-- settings popup -->
+    <div class="start-game-popup dark-overlay" id="start-game-popup">
       <div class="central-popup">
         <div class="popup-text popup-title">LET'S PLAY</div>
         <div class="number-of-holes-container">
@@ -29,13 +30,13 @@
           <div class="popup-text">
             Playing against other players:<input
               type="checkbox"
-              id="playmode"
+              id="playmode1"
             />
           </div>
         </div>
         <div class="setting-playmode-container">
           <div class="popup-text">
-            The computer starts:<input type="checkbox" id="playmode" />
+            The computer starts:<input type="checkbox" id="playmode2" />
           </div>
         </div>
         <button class="start-game-button" id="start-game-button">
@@ -85,25 +86,30 @@
         <button class="rules-button">Got it!</button>
       </div>
     </div>
-    <!-- closed popup-login + overlay, by clicking on the button -->
+    <!--  popup-logout + overlay, by clicking on the button -->
+    <div class="logout-overlay">
+      <div class="central-popup">
+        <div class="popup-text popup-title">Logout</div>
+            <div class="logout-container">
+            <div class="popup-text">You are logged in.</div>
+            <div class="logout-button-container">
+              <button class="logout-button">Logout</button>
+              <button class="logout-cancel-button">Cancel</button>
+            </div>
+        </div>
+      </div>
+    </div>
+    <!--  popup-login + overlay, by clicking on the button -->
     <div class="login-overlay">
       <div class="central-popup">
         <div class="popup-text popup-title">Login</div>
           <div class="login-container">
             <div class="popup-text">Name:</div>
-            <input type="text" id= "username" name="username"  />
+            <input type="text" id= "username" name="username" />
             <div class="popup-text">Password:</div>
-            <input type="text" id = "username" name="password" />
+            <input type="text" id = "password" name="password" />
             <div class="login-button-container">
               <button class="login-button">Login</button>
-              <button class="login-cancel-button">Cancel</button>
-            </div>
-          </div>
-          <div class="logout-container">
-            <div class="popup-text">You are logged in.</div>
-            <div class="logout-button-container">
-              <button class="logout-button">Logout</button>
-              <button class="logout-cancel-button">Cancel</button>
             </div>
           </div>
         </div>
@@ -207,7 +213,7 @@
           />
         </p>
         <p>
-          <img class="login-icon" src="assets/user.png" alt="user" />
+          <img class="logout-icon" src="assets/user.png" alt="user" />
         </p>
         <p>
           <img class="ranking-icon" src="assets/rankings.png" alt="rankings" />

@@ -57,6 +57,10 @@
   margin-top: 20px;
 }
 
+.start-game-popup {
+  display: none;
+}
+
 .hidden-overlay {
   display: none;
 }
@@ -94,6 +98,14 @@
   margin-top: 20px;
 }
 
+.error-login-text {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 42px;
+  color: rgb(156, 25, 25);
+}
+
 .logout-cancel-button {
   position: relative;
   margin-top: 20px;
@@ -109,7 +121,7 @@
   margin-top: 20px;
 }
 
-.login-overlay {
+.logout-overlay {
   display: none;
   position: fixed;
   width: 100%;
@@ -123,6 +135,11 @@
 .login-container {
   margin-top: 20px;
   display: list-item;
+}
+
+.login-overlay {
+  display: list-item;
+  z-index: 10;
 }
 
 .logout-container {
