@@ -21,7 +21,7 @@ import {
   PlayStyle,
 } from "./enums/enums.js";
 import { findBestAiMove } from "./game-utils/ai.js";
-import { join } from "./requests/requests.js";
+import { join, notify } from "./requests/requests.js";
 import { getUsername, setGame } from "./multiplayer/credentials.js";
 import { createEventSource } from "./multiplayer/events.js";
 
@@ -94,6 +94,10 @@ export default class GameLogic {
       return;
     }
     console.log(`Player: Making a move on hole <${holeIndex}>`);
+    if (this.playStyle === PlayStyle.ONLINE) {
+      notify(holeIndex);
+      return;
+    }
     const { lastFilledHoleIndex, distributeHoleEvent } = this.distributeSeeds(
       holeIndex,
       Actor.PLAYER

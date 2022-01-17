@@ -1,4 +1,8 @@
-import { getPassword, getUsername } from "../multiplayer/credentials.js";
+import {
+  getGame,
+  getPassword,
+  getUsername,
+} from "../multiplayer/credentials.js";
 
 const publicApi = "http://twserver.alunos.dcc.fc.up.pt:8008/";
 
@@ -102,5 +106,38 @@ export async function join(input) {
     }
   } catch (error) {
     console.error("Error joining", error);
+  }
+}
+
+export async function notify(move) {
+  const username = getUsername();
+  const password = getPassword();
+  const game = getGame();
+
+  try {
+    const response = await fetch(publicApi + "notify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nick: username,
+        password,
+        game,
+        move,
+      }),
+    });
+    if (response.status == 200) {
+      return JSON.parse(await response.text());
+    } else {
+      console.error(
+        "Notify responded with error",
+        response?.status,
+        response?.statusText
+      );
+      return false;
+    }
+  } catch (error) {
+    console.error("Error notifying", error);
   }
 }
