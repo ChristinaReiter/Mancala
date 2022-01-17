@@ -239,7 +239,23 @@ export default class GameLogic {
       this.holes,
       this.opponentHolesIndex
     );
-    if (playerTotalSeeds === 0 || opponentTotalSeeds === 0) {
+    let endGame = false;
+    if (playerTotalSeeds === 0 && opponentTotalSeeds === 0) {
+      endGame = true;
+    } else if (playerTotalSeeds === 0) {
+      endGame = true;
+      for (let i = this.opponentHolesIndex; i < this.holes.length; i++) {
+        this.holes[i] = 0;
+      }
+      this.warehouses[1] += opponentTotalSeeds;
+    } else if (opponentTotalSeeds === 0) {
+      endGame = true;
+      for (let i = 0; i < this.opponentHolesIndex; i++) {
+        this.holes[i] = 0;
+      }
+      this.warehouses[0] += playerTotalSeeds;
+    }
+    if (endGame) {
       console.log(
         "Gamemaster: Game is over because player/opponent has 0 seeds in his holes."
       );
