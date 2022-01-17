@@ -1,3 +1,4 @@
+import { GameStatus, PlayStyle } from "./enums/enums.js";
 import GameLogic from "./game-logic.js";
 
 // constants for settings
@@ -68,9 +69,9 @@ function updateNumberOfHoles() {
 function startOrResetGame() {
   startGameOverlayElem.setAttribute("style", "display: none;");
   // hide winner popup
-  updateWinner(-1);
+  updateWinner(GameStatus.WAITING_FOR_PLAYER);
   // TODO integrate multiplayer option
-  currentGame = new GameLogic(1, 0, numberOfHoles);
+  currentGame = new GameLogic(PlayStyle.OFFLINE, 0, numberOfHoles);
 
   // set warehouse scores to 0
   warehouseScoreLeft.innerHTML = 0;
@@ -140,25 +141,29 @@ function startOrResetGame() {
     `display: grid; grid-template-columns: ${gridTemplateColumns}`
   );
   displayHoleSeeds();
+  displayWarehouseSeeds();
 }
 
 export function updateHoleAndWarehouseScores() {
-  warehouseScoreLeft.innerHTML = currentGame.warehouses[0];
-  warehouseScoreRight.innerHTML = currentGame.warehouses[1];
+  warehouseScoreRight.innerHTML = currentGame.warehouses[0];
+  warehouseScoreLeft.innerHTML = currentGame.warehouses[1];
   for (let i = 0; i < currentGame.holes.length; i++) {
     const holeScore = document.getElementById(`hole-score-${i}`);
     holeScore.innerHTML = currentGame.holes[i];
   }
 }
 
-export function updateWinner(winnerIndex) {
-  if (winnerIndex === 0) {
+export function updateWinner(gameStatus) {
+  if (gameStatus === GameStatus.PLAYER_WON) {
     winnerElem.setAttribute("style", "display: block;");
     winnerTextElem.innerText = "YOU WON!";
-  } else if (winnerIndex === 1) {
+  } else if (gameStatus === GameStatus.OPPONENT_WON) {
     winnerElem.setAttribute("style", "display: block;");
     winnerTextElem.innerText = "YOU LOST :(";
-  } else if (winnerIndex === -1) {
+  } else if (gameStatus === GameStatus.DRAW) {
+    winnerElem.setAttribute("style", "display: block;");
+    winnerTextElem.innerText = "DRAW!";
+  } else {
     winnerElem.setAttribute("style", "display: none;");
   }
 }
@@ -167,8 +172,8 @@ export function displayWarehouseSeeds() {
   let leftWarehouse = document.getElementById("warehouse-ui-left");
   let anzahlWarehouseSeedsLeft = leftWarehouse.childElementCount;
 
-  if (currentGame.warehouses[0] > anzahlWarehouseSeedsLeft) {
-    var countAddSeedsL = currentGame.warehouses[0] - anzahlWarehouseSeedsLeft;
+  if (currentGame.warehouses[1] > anzahlWarehouseSeedsLeft) {
+    var countAddSeedsL = currentGame.warehouses[1] - anzahlWarehouseSeedsLeft;
     for (let i = 0; i < countAddSeedsL; i++) {
       var seedDivL = document.createElement("div");
       seedDivL.className = "seeds";
@@ -180,14 +185,18 @@ export function displayWarehouseSeeds() {
       );
       leftWarehouse.appendChild(seedDivL);
     }
-  } else {
+  } else if (currentGame.warehouses[1] < anzahlWarehouseSeedsLeft) {
+    var countDeleteSeeds = anzahlWarehouseSeedsLeft - currentGame.warehouses[1];
+    for (let n = 0; n < countDeleteSeeds; n++) {
+      leftWarehouse.removeChild(leftWarehouse.lastChild);
+    }
   }
 
   let rightWarehouse = document.getElementById("warehouse-ui-right");
   let anzahlWarehouseSeedsRight = rightWarehouse.childElementCount;
 
-  if (currentGame.warehouses[1] > anzahlWarehouseSeedsRight) {
-    var countAddSeedsR = currentGame.warehouses[1] - anzahlWarehouseSeedsRight;
+  if (currentGame.warehouses[0] > anzahlWarehouseSeedsRight) {
+    var countAddSeedsR = currentGame.warehouses[0] - anzahlWarehouseSeedsRight;
     for (let i = 0; i < countAddSeedsR; i++) {
       var seedDivR = document.createElement("div");
       seedDivR.className = "seeds";
@@ -199,7 +208,12 @@ export function displayWarehouseSeeds() {
       );
       rightWarehouse.appendChild(seedDivR);
     }
-  } else {
+  } else if (currentGame.warehouses[0] < anzahlWarehouseSeedsRight) {
+    var countDeleteSeeds =
+      anzahlWarehouseSeedsRight - currentGame.warehouses[0];
+    for (let n = 0; n < countDeleteSeeds; n++) {
+      rightWarehouse.removeChild(rightWarehouse.lastChild);
+    }
   }
 }
 
@@ -225,7 +239,6 @@ export function displayHoleSeeds() {
       for (let n = 0; n < countDeleteSeeds; n++) {
         holeIndexed.removeChild(holeIndexed.lastChild);
       }
-    } else {
     }
   }
 }
