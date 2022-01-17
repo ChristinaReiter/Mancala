@@ -20,7 +20,7 @@ import {
   GameStatus,
   PlayStyle,
 } from "./enums/enums.js";
-import { findRandomAiMove } from "./game-utils/ai.js";
+import { findBestAiMove } from "./game-utils/ai.js";
 
 export default class GameLogic {
   initialSeedsPerHole = numberOfSeeds;
@@ -46,7 +46,6 @@ export default class GameLogic {
     this.opponentHolesIndex = numberOfHoles / 2;
     this.holes = new Array(numberOfHoles).fill(this.initialSeedsPerHole);
     this.totalSeeds = numberOfHoles * this.initialSeedsPerHole;
-    //this.holes = [0, 1, 5, 5, 1, 3];
     this.warehouses = new Array(2).fill(0);
     this.gameStatus =
       playerStartIndex === 0
@@ -108,10 +107,9 @@ export default class GameLogic {
     console.log("AI: Thinking about my next move");
     // TODO use better AI function
     setTimeout(() => {
-      const holeIndex = findRandomAiMove({
+      const holeIndex = findBestAiMove({
         opponentHolesIndex: this.opponentHolesIndex,
         holes: this.holes,
-        gameStatus: this.gameStatus,
       });
       if (holeIndex === null) {
         console.log("AI: Sorry I can't do anything here :(");

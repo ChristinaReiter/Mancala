@@ -1,5 +1,21 @@
 import { isOpponentMoveValid } from "./move-validity.js";
 
+// simple method that uses the move that moves the most seeds into the warehouse in one move
+// returns hole index or null if no move is possible
+// input: {opponentHolesIndex, holes}
+export function findBestAiMove(input) {
+  let highestSeedCount = -1;
+  let highestSeedIndex = -1;
+  for (let i = input.opponentHolesIndex; i < input.holes.length; i++) {
+    const curSeedCount = input.holes[i];
+    if (curSeedCount > highestSeedCount) {
+      highestSeedCount = curSeedCount;
+      highestSeedIndex = i;
+    }
+  }
+  return highestSeedIndex > -1 ? highestSeedIndex : null;
+}
+
 // simple method that finds the first possible move out of a randomly order of the hole indices
 // returns hole index or null if no move is possible
 // input: {opponentHolesIndex, holes, gameStatus}
