@@ -26,7 +26,7 @@ let warehouseScoreLeft = document.getElementById("warehouse-left");
 let warehouseScoreRight = document.getElementById("warehouse-right");
 
 //variables for Seed Settings
-export let numberOfSeeds = 5;
+let numberOfSeeds = 5;
 const minNumberOfSeeds = 1;
 const maxNumberOfSeeds = 15;
 let numberOfSeedsDisplayElem = document.querySelector(
@@ -76,9 +76,9 @@ function startOrResetGame() {
 
   let checkbox = document.getElementById("checkbox");
   if (checkbox.checked) {
-    currentGame = new GameLogic(PlayStyle.OFFLINE, 1, numberOfHoles);
+    currentGame = new GameLogic(PlayStyle.OFFLINE, 1, numberOfHoles, numberOfSeeds);
   } else {
-    currentGame = new GameLogic(PlayStyle.OFFLINE, 0, numberOfHoles);
+    currentGame = new GameLogic(PlayStyle.OFFLINE, 0, numberOfHoles, numberOfSeeds);
   }
 
   // set warehouse scores to 0

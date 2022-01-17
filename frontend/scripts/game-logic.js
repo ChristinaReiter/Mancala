@@ -1,6 +1,5 @@
 import {
   updateHoleAndWarehouseScores,
-  numberOfSeeds,
   updateWinner,
   displayHoleSeeds,
   displayWarehouseSeeds,
@@ -24,7 +23,7 @@ import {
 import { findBestAiMove } from "./game-utils/ai.js";
 
 export default class GameLogic {
-  initialSeedsPerHole = numberOfSeeds;
+  initialSeedsPerHole;
   seedsToWin = 24;
   // either PlaySyle.OFFLINE or PlayStyle.ONLINE
   playStyle;
@@ -44,9 +43,10 @@ export default class GameLogic {
   // used to execute first ai move when the computer shall start in an offline game
   playerStartIndex;
 
-  constructor(playStyle, playerStartIndex, numberOfHoles) {
+  constructor(playStyle, playerStartIndex, numberOfHoles, numberOfSeeds) {
     this.playStyle = playStyle;
     this.opponentHolesIndex = numberOfHoles / 2;
+    this.initialSeedsPerHole = numberOfSeeds;
     this.holes = new Array(numberOfHoles).fill(this.initialSeedsPerHole);
     this.totalSeeds = numberOfHoles * this.initialSeedsPerHole;
     this.warehouses = new Array(2).fill(0);
