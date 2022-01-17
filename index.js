@@ -1,7 +1,4 @@
 const http = require("http");
-// package needs to be installed but is used in the course's tutorial so should be fine
-// https://www.dcc.fc.up.pt/~zp/SeWenta/LTW21/ : Theoretical/Server/Node/Examples/Galo/modules
-const WebSocketServer = require("websocket").server;
 const fs = require("fs");
 const path = require("path");
 const requests = require("./backend/requests.js");
@@ -43,28 +40,3 @@ const httpServer = http
   .listen(8081, () => {
     console.log("server listening on http://localhost:8081");
   });
-
-// dummy web socket server that accepts and prints messages for now
-new WebSocketServer({
-  httpServer,
-}).on("request", function (request) {
-  var connection = request.accept(null, request.origin);
-  console.log(new Date() + " Connection accepted.");
-  connection.on("message", function (message) {
-    console.log("receiving message");
-    if (message.type === "utf8") {
-      console.log("Received Message: " + message.utf8Data);
-      connection.sendUTF(message.utf8Data);
-    } else if (message.type === "binary") {
-      console.log(
-        "Received Binary Message of " + message.binaryData.length + " bytes"
-      );
-      connection.sendBytes(message.binaryData);
-    }
-  });
-  connection.on("close", function (_, _) {
-    console.log(
-      new Date() + " Peer " + connection.remoteAddress + " disconnected."
-    );
-  });
-});

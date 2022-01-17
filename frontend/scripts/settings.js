@@ -1,6 +1,5 @@
 import { GameStatus, PlayStyle } from "./enums/enums.js";
 import GameLogic from "./game-logic.js";
-import { countSeeds } from "./game-utils/seed-counting.js";
 
 // constants for settings
 const minNumberOfHoles = 2;
@@ -278,6 +277,5 @@ function displayBorder(elem1) {
       "style",
       "box-sizing; -moz-box-sizing; -webkit-box-sizing; border;"
     );
-    console.log("Hey");
   }, 2000);
 }

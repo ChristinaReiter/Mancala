@@ -46,7 +46,7 @@ module.exports.registerUser = (username, password) => {
   }
 
   const hashedPassword = hashing.hashString(password);
-  console.log(users);
+
   for (let user of users) {
     if (user?.username === username) {
       if (user.password === hashedPassword) {
