@@ -55,7 +55,7 @@
     </div>
     <!-- closed popup-rules + overlay, by clicking on the '?' -->
     <div class="rules-overlay">
-      <div class="central-popup">
+      <div class="rules-popup">
         <div class="popup-text popup-title">Rules</div>
         <div class="rules-container">
           <div class="rules-text">
@@ -119,18 +119,7 @@
       <div class="central-popup">
         <div class="popup-text popup-title">Ranking</div>
         <div class="ranking-container">
-          <ol>
-            <li class="popup-text" id="ranking0"></li>
-            <li class="popup-text" id="ranking1"></li>
-            <li class="popup-text" id="ranking2"></li>
-            <li class="popup-text" id="ranking3"></li>
-            <li class="popup-text" id="ranking4"></li>
-            <li class="popup-text" id="ranking5"></li>
-            <li class="popup-text" id="ranking6"></li>
-            <li class="popup-text" id="ranking7"></li>
-            <li class="popup-text" id="ranking8"></li>
-            <li class="popup-text" id="ranking9"></li>
-          </ol>
+          <ol id="ranking"></ol>
         </div>
         <button class="ranking-button">Ok</button>
       </div>
@@ -144,7 +133,7 @@
       <!-- gameboard -->
       <div class="gameboard">
         <div class="warehouse-container">
-          <div id="warehouse-left" class="warehouse-score"><span>5</span></div>
+          <div id="warehouse-left" class="warehouse-score"><span>0</span></div>
           <div
             id="warehouse-ui-left"
             class="warehouse-ui warehouse-ui-left"
@@ -198,15 +187,12 @@
             id="warehouse-right"
             class="warehouse-score warehouse-score-right"
           >
-            <span>5</span>
+            <span>0</span>
           </div>
         </div>
       </div>
       <!-- user control icons -->
       <div class="user-controls">
-        <p>
-          <img src="assets/settings.png" alt="settings" />
-        </p>
         <p>
           <img
             id="restart-game-icon"

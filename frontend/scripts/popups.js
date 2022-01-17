@@ -91,12 +91,18 @@ rankingicon.addEventListener(
   async function () {
     rankingDisplay.setAttribute("style", "display: list-item; z-index: 10;");
     let result = await getRanking();
-    console.log(result);
     let resultJSON = JSON.parse(result);
-    console.log(resultJSON);
-
-    //In liste einfügen
-    for (let i = 0; i < 10; i++) {}
+    let ranking = resultJSON.ranking;
+    if (ranking.length > 10) ranking = ranking.slice(0, 10);
+    let rankingELem = document.getElementById("ranking");
+    rankingELem.innerHTML = "";
+    for (let entry of ranking) {
+      const { nick, victories, games } = entry;
+      var rankingLi = document.createElement("li");
+      rankingLi.className = "popup-text";
+      rankingLi.innerHTML = nick;
+      rankingELem.appendChild(rankingLi);
+    }
   },
   false
 );

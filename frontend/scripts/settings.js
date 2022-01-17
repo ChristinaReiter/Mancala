@@ -267,7 +267,7 @@ function updateNumberOfSeeds() {
 }
 
 //Border when selecting a hole
-function displayBorder(elem1) {
+export function displayBorder(elem1) {
   elem1.setAttribute(
     "style",
     "  box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; border: 5px inset #ffffff;"
@@ -279,3 +279,6 @@ function displayBorder(elem1) {
     );
   }, 2000);
 }
+
+//Select the computer starts
+function startSetting() {}
