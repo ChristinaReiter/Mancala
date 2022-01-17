@@ -9,7 +9,11 @@ import {
   isPlayerMoveValid,
   isOpponentMoveValid,
 } from "./game-utils/move-validity.js";
-import { countSeeds } from "./game-utils/seed-counting.js";
+import {
+  countSeeds,
+  mergeHolesAndWarehouses,
+  divideMergedArray,
+} from "./game-utils/seed-handling.js";
 import {
   Actor,
   DistributeHoleEvent,
@@ -183,8 +187,12 @@ export default class GameLogic {
     // empty selected hole
     this.holes[holeIndex] = 0;
     // temporarily merge holes and warehouses for seed distribution
-    const { mergedArray, actorWarehouseIndex } =
-      this.mergeHolesAndWarehouses(actor);
+    const { mergedArray, actorWarehouseIndex } = mergeHolesAndWarehouses({
+      actor,
+      holes: this.holes,
+      opponentHolesIndex: this.opponentHolesIndex,
+      warehouses: this.warehouses,
+    });
     // fill next holes
     for (let i = 1; i <= holeValue; i++) {
       // module will prevent array overflow
@@ -193,7 +201,7 @@ export default class GameLogic {
     }
     const lastFilledHoleIndex = (holeIndex + holeValue) % mergedArray.length;
     console.log("emptyHole returning", lastFilledHoleIndex);
-    const { updatedHoles, updatedWarehouse } = this.divideMergedArray({
+    const { updatedHoles, updatedWarehouse } = divideMergedArray({
       mergedArray,
       actor,
       actorWarehouseIndex,
@@ -311,38 +319,5 @@ export default class GameLogic {
       a[j] = x;
     }
     return a;
-  }
-
-  mergeHolesAndWarehouses(actor) {
-    let actorWarehouseIndex;
-    let mergedArray = this.holes.slice(0, this.opponentHolesIndex);
-    if (actor === Actor.PLAYER) {
-      actorWarehouseIndex = mergedArray.length;
-      mergedArray.push(this.warehouses[0]);
-    }
-    mergedArray = mergedArray.concat(
-      this.holes.slice(this.opponentHolesIndex, this.holes.length)
-    );
-    if (actor === Actor.OPPONENT) {
-      actorWarehouseIndex = mergedArray.length;
-      mergedArray.push(this.warehouses[1]);
-    }
-    return { mergedArray, actorWarehouseIndex };
-  }
-
-  //input: {mergedArray, actor, actorWarehouseIndex}
-  divideMergedArray(input) {
-    let updatedHoles = [];
-    let updatedPlayerHoles = input.mergedArray.slice(
-      0,
-      input.actorWarehouseIndex
-    );
-    let updatedOpponentHoles = input.mergedArray.slice(
-      input.actorWarehouseIndex + 1,
-      input.mergedArray.length
-    );
-    updatedHoles = updatedPlayerHoles.concat(updatedOpponentHoles);
-    const updatedWarehouse = input.mergedArray[input.actorWarehouseIndex];
-    return { updatedHoles, updatedWarehouse };
   }
 }
