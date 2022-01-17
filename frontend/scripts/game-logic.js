@@ -21,6 +21,9 @@ import {
   PlayStyle,
 } from "./enums/enums.js";
 import { findBestAiMove } from "./game-utils/ai.js";
+import { join } from "./requests/requests.js";
+import { getUsername, setGame } from "./multiplayer/credentials.js";
+import { createEventSource } from "./multiplayer/events.js";
 
 export default class GameLogic {
   initialSeedsPerHole;
@@ -42,6 +45,8 @@ export default class GameLogic {
   gameStatus;
   // used to execute first ai move when the computer shall start in an offline game
   playerStartIndex;
+  // event source for receiving game updates, only used in multiplayer
+  eventSource;
 
   constructor(playStyle, playerStartIndex, numberOfHoles, numberOfSeeds) {
     this.playStyle = playStyle;
@@ -51,10 +56,27 @@ export default class GameLogic {
     this.totalSeeds = numberOfHoles * this.initialSeedsPerHole;
     this.warehouses = new Array(2).fill(0);
     this.playerStartIndex = playerStartIndex;
+    if (playStyle === PlayStyle.ONLINE) {
+      displayMessage(2);
+      this.initOnlineGame();
+    }
     this.gameStatus =
-      playerStartIndex === 0
+      playStyle === PlayStyle.ONLINE
+        ? GameStatus.WAITING_FOR_SERVER
+        : playerStartIndex === 0
         ? GameStatus.WAITING_FOR_PLAYER
         : GameStatus.WAITING_FOR_OPPONENT;
+  }
+
+  async initOnlineGame() {
+    // call join
+    const gameId = await join({
+      size: this.opponentHolesIndex,
+      initial: this.initialSeedsPerHole,
+    });
+    setGame(gameId);
+    const nick = getUsername();
+    this.eventSource = createEventSource(nick, gameId);
   }
 
   executePlayerMove(holeIndex) {
@@ -94,10 +116,7 @@ export default class GameLogic {
       this.holes[oppositeHoleIndex] = 0;
       this.warehouses[0] = this.warehouses[0] + seedsToMove;
     }
-    this.checkGameOver();
-    updateHoleAndWarehouseScores();
-    displayWarehouseSeeds();
-    displayHoleSeeds();
+    this.updateUI();
     displayMessage(0);
     if (
       this.gameStatus === GameStatus.WAITING_FOR_PLAYER &&
@@ -162,10 +181,7 @@ export default class GameLogic {
       var selectedHole = document.getElementById(`hole-ui-${holeIndex}`);
       displayBorder(selectedHole);
       console.log(`AI: Finished my move on hole <${holeIndex}> 😎`);
-      this.checkGameOver();
-      updateHoleAndWarehouseScores();
-      displayWarehouseSeeds();
-      displayHoleSeeds();
+      this.updateUI();
       displayMessage(0);
       if (
         this.gameStatus === GameStatus.OPPONENT_WON ||
@@ -298,15 +314,49 @@ export default class GameLogic {
       return;
     }
   }
+
+  updateUI() {
+    this.checkGameOver();
+    updateHoleAndWarehouseScores();
+    displayWarehouseSeeds();
+    displayHoleSeeds();
+  }
+
+  // input: {gameStatus, playerWarehouse, playerHoles, opponentWarehouse, opponentHoles}
+  updateGameFromEvent(input) {
+    this.gameStatus = input.gameStatus;
+    if (this.gameStatus === GameStatus.WAITING_FOR_PLAYER) {
+      displayMessage(0);
+    } else if (this.gameStatus === GameStatus.WAITING_FOR_OPPONENT) {
+      displayMessage(1);
+    }
+    this.warehouses[0] = input.playerWarehouse;
+    this.warehouses[1] = input.opponentWarehouse;
+    for (let i = 0; i < this.opponentHolesIndex; i++) {
+      this.holes[i] = input.playerHoles[i];
+      const j = i + this.opponentHolesIndex;
+      this.holes[j] = input.opponentHoles[i];
+    }
+    this.updateUI();
+  }
+
+  updateWinner(gameStatus) {
+    this.gameStatus = gameStatus;
+    this.updateUI();
+  }
 }
 
 //Message-Panel
 export function displayMessage(turn) {
-  if (turn == 0) {
+  if (turn === 0) {
     document.getElementById("messagepanel").innerHTML = "Your turn.";
   } else if (turn == 1) {
     document.getElementById("messagepanel").innerHTML = "Game over.";
-  } else {
+  // TODO fix this, which === 1 is true
+  } else if (turn === 1) {
     document.getElementById("messagepanel").innerHTML = "The other one's turn.";
+  } else {
+    document.getElementById("messagepanel").innerHTML =
+      "Waiting for opponent to join.";
   }
 }

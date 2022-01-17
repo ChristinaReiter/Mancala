@@ -41,6 +41,10 @@ let numberOfHoles = maxNumberOfHoles;
 // game variables
 let currentGame;
 
+export function getCurrentGame() {
+  return currentGame;
+}
+
 updateNumberOfHoles();
 updateNumberOfSeeds();
 
