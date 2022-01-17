@@ -63,7 +63,7 @@ let errorText = document.querySelector(".error-login-text");
 
 loginbutton.addEventListener(
   "click",
-  function () {
+  async function () {
     let usernamevalue = username.value;
     let passwordvalue = password.value;
     if (usernamevalue == "" || passwordvalue == "") {
