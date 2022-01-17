@@ -1,6 +1,10 @@
 # Run WLT-Mancala
 
-## 1. Start server
+## 1. Install dependencies (once)
+
+npm install
+
+## 2. Start server
 
 ### Via production server
 
@@ -10,6 +14,6 @@ node index.js
 
 node devServer.js
 
-## 2. Open mancala in the browser
+## 3. Open mancala in the browser
 
 http://localhost:8081/
