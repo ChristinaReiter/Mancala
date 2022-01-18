@@ -4,6 +4,7 @@ import {
   updateWinner,
   displayHoleSeeds,
   displayWarehouseSeeds,
+  displayBorder,
 } from "./settings.js";
 import {
   isPlayerMoveValid,
@@ -40,6 +41,8 @@ export default class GameLogic {
   warehouses;
   // PLAYER_WON / OPPONENT_WON / WAITING_FOR_PLAYER / WAITING_FOR_OPPONENT
   gameStatus;
+  // used to execute first ai move when the computer shall start in an offline game
+  playerStartIndex;
 
   constructor(playStyle, playerStartIndex, numberOfHoles) {
     this.playStyle = playStyle;
@@ -47,6 +50,7 @@ export default class GameLogic {
     this.holes = new Array(numberOfHoles).fill(this.initialSeedsPerHole);
     this.totalSeeds = numberOfHoles * this.initialSeedsPerHole;
     this.warehouses = new Array(2).fill(0);
+    this.playerStartIndex = playerStartIndex;
     this.gameStatus =
       playerStartIndex === 0
         ? GameStatus.WAITING_FOR_PLAYER
@@ -105,11 +109,11 @@ export default class GameLogic {
   }
 
   async executeAiMove() {
-    displayMessage(1);
+    displayMessage(2);
     console.log("AI: Thinking about my next move");
     // TODO use better AI function
     setTimeout(() => {
-      const holeIndex = findBestAiMove({
+      let holeIndex = findBestAiMove({
         opponentHolesIndex: this.opponentHolesIndex,
         holes: this.holes,
       });
@@ -155,7 +159,8 @@ export default class GameLogic {
         this.holes[oppositeHoleIndex] = 0;
         this.warehouses[1] = this.warehouses[1] + seedsToMove;
       }
-
+      var selectedHole = document.getElementById(`hole-ui-${holeIndex}`);
+      displayBorder(selectedHole);
       console.log(`AI: Finished my move on hole <${holeIndex}> 😎`);
       this.checkGameOver();
       updateHoleAndWarehouseScores();
@@ -167,6 +172,7 @@ export default class GameLogic {
         this.gameStatus === GameStatus.PLAYER_WON
       ) {
         console.log(`Gamemaster: We have a winner: <${this.gameStatus}>`);
+        displayMessage(1);
         return;
       }
       if (distributeHoleEvent !== DistributeHoleEvent.IN_OWN_WAREHOUSE) {
@@ -231,6 +237,7 @@ export default class GameLogic {
     // player has enough seeds in his / her warehouse
     if (this.warehouses[0] >= this.seedsToWin) {
       this.gameStatus = GameStatus.PLAYER_WON;
+      displayMessage(1);
       console.log(
         "Gamemaster: Game is over because player has enough seeds to win."
       );
@@ -238,6 +245,7 @@ export default class GameLogic {
     }
     if (this.warehouses[1] >= this.seedsToWin) {
       this.gameStatus = GameStatus.OPPONENT_WON;
+      displayMessage(1);
       console.log(
         "Gamemaster: Game is over because opponent has enough seeds to win."
       );
@@ -273,6 +281,7 @@ export default class GameLogic {
       console.log(
         "Gamemaster: Game is over because player/opponent has 0 seeds in his holes."
       );
+      displayMessage(1);
       this.gameStatus =
         this.warehouses[0] > this.warehouses[1]
           ? GameStatus.PLAYER_WON
@@ -295,6 +304,8 @@ export default class GameLogic {
 export function displayMessage(turn) {
   if (turn == 0) {
     document.getElementById("messagepanel").innerHTML = "Your turn.";
+  } else if (turn == 1) {
+    document.getElementById("messagepanel").innerHTML = "Game over.";
   } else {
     document.getElementById("messagepanel").innerHTML = "The other one's turn.";
   }

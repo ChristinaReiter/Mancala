@@ -59,22 +59,22 @@ let loginbutton = document.querySelector(".login-button");
 let username = document.getElementById("username");
 let password = document.getElementById("password");
 let displayLoginForm = document.querySelector(".login-container");
-let errorText = document.createElement("div");
-errorText.className = "error-login-text";
-errorText.innerHTML = "Invalid input.";
+let errorText = document.querySelector(".error-login-text");
 
 loginbutton.addEventListener(
   "click",
   function () {
     let usernamevalue = username.value;
     let passwordvalue = password.value;
-    if (Boolean(registerUser(usernamevalue, passwordvalue)) == true) {
+    if (usernamevalue == "" || passwordvalue == "") {
+      errorText.innerHTML = "Invalid input.";
+    } else if (Boolean(registerUser(usernamevalue, passwordvalue)) == true) {
       loginDisplay.setAttribute("style", "display: none;");
       document
         .getElementById("start-game-popup")
         .setAttribute("style", "display: block; z-index: 10;");
     } else {
-      password.appendChild(errorText);
+      errorText.innerHTML = "Invalid input.";
     }
   },
   false
@@ -91,12 +91,18 @@ rankingicon.addEventListener(
   async function () {
     rankingDisplay.setAttribute("style", "display: list-item; z-index: 10;");
     let result = await getRanking();
-    console.log(result);
     let resultJSON = JSON.parse(result);
-    console.log(resultJSON);
-
-    //In liste einfügen
-    for (let i = 0; i < 10; i++) {}
+    let ranking = resultJSON.ranking;
+    if (ranking.length > 10) ranking = ranking.slice(0, 10);
+    let rankingELem = document.getElementById("ranking");
+    rankingELem.innerHTML = "";
+    for (let entry of ranking) {
+      const { nick, victories, games } = entry;
+      var rankingLi = document.createElement("li");
+      rankingLi.className = "popup-text";
+      rankingLi.innerHTML = nick;
+      rankingELem.appendChild(rankingLi);
+    }
   },
   false
 );

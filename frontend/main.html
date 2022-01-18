@@ -15,28 +15,29 @@
       <div class="central-popup">
         <div class="popup-text popup-title">LET'S PLAY</div>
         <div class="number-of-holes-container">
-          <div class="popup-text">Number of holes</div>
+          <div class="popup-text">Number of holes:</div>
           <button class="number-of-holes-minus">-</button>
           <h1 class="number-of-holes-display">(..)</h1>
           <button class="number-of-holes-plus">+</button>
         </div>
         <div class="number-of-seeds-container">
-          <div class="popup-text">Initial number of seeds</div>
+          <div class="popup-text">Initial Number of Seeds:</div>
           <button class="number-of-seeds-minus">-</button>
           <h1 class="number-of-seeds-display">(..)</h1>
           <button class="number-of-seeds-plus">+</button>
         </div>
-        <div class="setting-playmode-container">
-          <div class="popup-text">
-            Playing against other players:<input
-              type="checkbox"
-              id="playmode1"
-            />
-          </div>
+        <div class="popup-text">________________________</div>
+        <div class="popup-text">Start playing online with other players:</div>
+        <button class="multiplayer-button" id="multiplayer-button">
+          Start Multiplayer Game!
+        </button>
+        <div class="popup-text">________________________</div>
+        <div class="popup-text">
+          Start playing offline against the computer:
         </div>
-        <div class="setting-playmode-container">
+        <div class="starting-setting">
           <div class="popup-text">
-            The computer starts:<input type="checkbox" id="playmode2" />
+            Computer can start:<input type="checkbox" id="checkbox" />
           </div>
         </div>
         <button class="start-game-button" id="start-game-button">
@@ -55,7 +56,7 @@
     </div>
     <!-- closed popup-rules + overlay, by clicking on the '?' -->
     <div class="rules-overlay">
-      <div class="central-popup">
+      <div class="rules-popup">
         <div class="popup-text popup-title">Rules</div>
         <div class="rules-container">
           <div class="rules-text">
@@ -108,6 +109,7 @@
           <input type="text" id="username" name="username" value="" />
           <div class="popup-text">Password:</div>
           <input type="text" id="password" name="password" value="" />
+          <div class="error-login-text"></div>
           <div class="login-button-container">
             <button class="login-button">Login</button>
           </div>
@@ -119,18 +121,7 @@
       <div class="central-popup">
         <div class="popup-text popup-title">Ranking</div>
         <div class="ranking-container">
-          <ol>
-            <li class="popup-text" id="ranking0"></li>
-            <li class="popup-text" id="ranking1"></li>
-            <li class="popup-text" id="ranking2"></li>
-            <li class="popup-text" id="ranking3"></li>
-            <li class="popup-text" id="ranking4"></li>
-            <li class="popup-text" id="ranking5"></li>
-            <li class="popup-text" id="ranking6"></li>
-            <li class="popup-text" id="ranking7"></li>
-            <li class="popup-text" id="ranking8"></li>
-            <li class="popup-text" id="ranking9"></li>
-          </ol>
+          <ol id="ranking"></ol>
         </div>
         <button class="ranking-button">Ok</button>
       </div>
@@ -144,7 +135,7 @@
       <!-- gameboard -->
       <div class="gameboard">
         <div class="warehouse-container">
-          <div id="warehouse-left" class="warehouse-score"><span>5</span></div>
+          <div id="warehouse-left" class="warehouse-score"><span>0</span></div>
           <div
             id="warehouse-ui-left"
             class="warehouse-ui warehouse-ui-left"
@@ -198,15 +189,12 @@
             id="warehouse-right"
             class="warehouse-score warehouse-score-right"
           >
-            <span>5</span>
+            <span>0</span>
           </div>
         </div>
       </div>
       <!-- user control icons -->
       <div class="user-controls">
-        <p>
-          <img src="assets/settings.png" alt="settings" />
-        </p>
         <p>
           <img
             id="restart-game-icon"

@@ -58,7 +58,9 @@ numberOfHolesMinusElem.addEventListener("click", () => {
   }
 });
 
-startGameButton.addEventListener("click", startOrResetGame);
+startGameButton.addEventListener("click", () => {
+  startOrResetGame();
+});
 restartGameButton.addEventListener("click", startOrResetGame);
 restartGameIcon.addEventListener("click", startOrResetGame);
 
@@ -71,7 +73,13 @@ function startOrResetGame() {
   // hide winner popup
   updateWinner(GameStatus.WAITING_FOR_PLAYER);
   // TODO integrate multiplayer option
-  currentGame = new GameLogic(PlayStyle.OFFLINE, 0, numberOfHoles);
+
+  let checkbox = document.getElementById("checkbox");
+  if (checkbox.checked) {
+    currentGame = new GameLogic(PlayStyle.OFFLINE, 1, numberOfHoles);
+  } else {
+    currentGame = new GameLogic(PlayStyle.OFFLINE, 0, numberOfHoles);
+  }
 
   // set warehouse scores to 0
   warehouseScoreLeft.innerHTML = 0;
@@ -143,6 +151,14 @@ function startOrResetGame() {
   );
   displayHoleSeeds();
   displayWarehouseSeeds();
+
+  if (
+    currentGame.playerStartIndex === 1 &&
+    currentGame.playStyle === PlayStyle.OFFLINE
+  ) {
+    currentGame.executeAiMove();
+  } else {
+  }
 }
 
 export function updateHoleAndWarehouseScores() {
@@ -267,7 +283,7 @@ function updateNumberOfSeeds() {
 }
 
 //Border when selecting a hole
-function displayBorder(elem1) {
+export function displayBorder(elem1) {
   elem1.setAttribute(
     "style",
     "  box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; border: 5px inset #ffffff;"
