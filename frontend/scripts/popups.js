@@ -59,22 +59,22 @@ let loginbutton = document.querySelector(".login-button");
 let username = document.getElementById("username");
 let password = document.getElementById("password");
 let displayLoginForm = document.querySelector(".login-container");
-let errorText = document.createElement("div");
-errorText.className = "error-login-text";
-errorText.innerHTML = "Invalid input.";
+let errorText = document.querySelector(".error-login-text");
 
 loginbutton.addEventListener(
   "click",
   function () {
     let usernamevalue = username.value;
     let passwordvalue = password.value;
-    if (Boolean(registerUser(usernamevalue, passwordvalue)) == true) {
+    if (usernamevalue == "" || passwordvalue == "") {
+      errorText.innerHTML = "Invalid input.";
+    } else if (Boolean(registerUser(usernamevalue, passwordvalue)) == true) {
       loginDisplay.setAttribute("style", "display: none;");
       document
         .getElementById("start-game-popup")
         .setAttribute("style", "display: block; z-index: 10;");
     } else {
-      password.appendChild(errorText);
+      errorText.innerHTML = "Invalid input.";
     }
   },
   false

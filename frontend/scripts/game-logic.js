@@ -41,15 +41,16 @@ export default class GameLogic {
   warehouses;
   // PLAYER_WON / OPPONENT_WON / WAITING_FOR_PLAYER / WAITING_FOR_OPPONENT
   gameStatus;
+  // used to execute first ai move when the computer shall start in an offline game
+  playerStartIndex;
 
   constructor(playStyle, playerStartIndex, numberOfHoles) {
     this.playStyle = playStyle;
     this.opponentHolesIndex = numberOfHoles / 2;
     this.holes = new Array(numberOfHoles).fill(this.initialSeedsPerHole);
-    //this.holes = [1, 3, 1, 3, 1, 2, 4, 2];
     this.totalSeeds = numberOfHoles * this.initialSeedsPerHole;
     this.warehouses = new Array(2).fill(0);
-    //this.warehouses = [14, 9];
+    this.playerStartIndex = playerStartIndex;
     this.gameStatus =
       playerStartIndex === 0
         ? GameStatus.WAITING_FOR_PLAYER

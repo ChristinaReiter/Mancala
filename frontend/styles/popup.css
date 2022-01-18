@@ -55,10 +55,23 @@
 
 .start-game-button {
   margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.multiplayer-button {
+  margin-top: 20px;
 }
 
 .start-game-popup {
   display: none;
+}
+
+.starting-setting {
+  display: list-item;
+}
+
+.multiplayer-setting {
+  display: list-item;
 }
 
 .hidden-overlay {
