@@ -1,4 +1,9 @@
-import { registerUser, getRanking } from "./requests/requests.js";
+import {
+  getUsername,
+  setUsername,
+  setPassword,
+} from "./multiplayer/credentials.js";
+import { registerUserPublic, getRanking } from "./requests/requests.js";
 
 // Rules Popup
 let rulesDisplay = document.querySelector(".rules-overlay");
@@ -63,16 +68,18 @@ let errorText = document.querySelector(".error-login-text");
 
 loginbutton.addEventListener(
   "click",
-  function () {
+  async function () {
     let usernamevalue = username.value;
     let passwordvalue = password.value;
     if (usernamevalue == "" || passwordvalue == "") {
       errorText.innerHTML = "Invalid input.";
-    } else if (Boolean(registerUser(usernamevalue, passwordvalue)) == true) {
+    } else if (Boolean(registerUserPublic(usernamevalue, passwordvalue)) == true) {
       loginDisplay.setAttribute("style", "display: none;");
       document
         .getElementById("start-game-popup")
         .setAttribute("style", "display: block; z-index: 10;");
+      setUsername(usernamevalue);
+      setPassword(passwordvalue);
     } else {
       errorText.innerHTML = "Invalid input.";
     }

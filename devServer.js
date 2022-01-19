@@ -12,6 +12,10 @@ const frontendRequestsFolderName = path.join(
   __dirname,
   "/frontend/scripts/requests"
 );
+const frontendMultiplayerFolderName = path.join(
+  __dirname,
+  "/frontend/scripts/multiplayer"
+);
 const styleFolderName = path.join(__dirname, "/frontend/styles");
 const htmlFileName = path.join(__dirname, "/frontend/main.html");
 
@@ -21,6 +25,7 @@ const frontendWatcher = fs.watch(frontendFolderName);
 const frontendRequestsWatcher = fs.watch(frontendRequestsFolderName);
 const styleWatcher = fs.watch(styleFolderName);
 const htmlWatcher = fs.watch(htmlFileName);
+const multiplayerWatcher = fs.watch(frontendMultiplayerFolderName);
 // create a child process for the target application
 let currentChild = child.fork(fileName);
 
@@ -29,6 +34,7 @@ frontendWatcher.on("change", hotReload);
 frontendRequestsWatcher.on("change", hotReload);
 styleWatcher.on("change", hotReload);
 htmlWatcher.on("change", hotReload);
+multiplayerWatcher.on("change", hotReload);
 
 function hotReload() {
   // we assure we have only one child process at time

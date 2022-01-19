@@ -1,10 +1,8 @@
 import {
   updateHoleAndWarehouseScores,
-  numberOfSeeds,
   updateWinner,
   displayHoleSeeds,
   displayWarehouseSeeds,
-  displayBorder,
 } from "./settings.js";
 import {
   isPlayerMoveValid,
@@ -22,9 +20,12 @@ import {
   PlayStyle,
 } from "./enums/enums.js";
 import { findBestAiMove } from "./game-utils/ai.js";
+import { join, notify } from "./requests/requests.js";
+import { getUsername, setGame } from "./multiplayer/credentials.js";
+import { createEventSource } from "./multiplayer/events.js";
 
 export default class GameLogic {
-  initialSeedsPerHole = numberOfSeeds;
+  initialSeedsPerHole;
   seedsToWin = 24;
   // either PlaySyle.OFFLINE or PlayStyle.ONLINE
   playStyle;
@@ -43,18 +44,38 @@ export default class GameLogic {
   gameStatus;
   // used to execute first ai move when the computer shall start in an offline game
   playerStartIndex;
+  // event source for receiving game updates, only used in multiplayer
+  eventSource;
 
-  constructor(playStyle, playerStartIndex, numberOfHoles) {
+  constructor(playStyle, playerStartIndex, numberOfHoles, numberOfSeeds) {
     this.playStyle = playStyle;
     this.opponentHolesIndex = numberOfHoles / 2;
+    this.initialSeedsPerHole = numberOfSeeds;
     this.holes = new Array(numberOfHoles).fill(this.initialSeedsPerHole);
     this.totalSeeds = numberOfHoles * this.initialSeedsPerHole;
     this.warehouses = new Array(2).fill(0);
     this.playerStartIndex = playerStartIndex;
+    if (playStyle === PlayStyle.ONLINE) {
+      displayMessage(3);
+      this.initOnlineGame();
+    }
     this.gameStatus =
-      playerStartIndex === 0
+      playStyle === PlayStyle.ONLINE
+        ? GameStatus.WAITING_FOR_SERVER
+        : playerStartIndex === 0
         ? GameStatus.WAITING_FOR_PLAYER
         : GameStatus.WAITING_FOR_OPPONENT;
+  }
+
+  async initOnlineGame() {
+    // call join
+    const gameId = await join({
+      size: this.opponentHolesIndex,
+      initial: this.initialSeedsPerHole,
+    });
+    setGame(gameId);
+    const nick = getUsername();
+    this.eventSource = createEventSource(nick, gameId);
   }
 
   executePlayerMove(holeIndex) {
@@ -72,6 +93,11 @@ export default class GameLogic {
       return;
     }
     console.log(`Player: Making a move on hole <${holeIndex}>`);
+    if (this.playStyle === PlayStyle.ONLINE) {
+      displayBorder(holeIndex);
+      notify(holeIndex);
+      return;
+    }
     const { lastFilledHoleIndex, distributeHoleEvent } = this.distributeSeeds(
       holeIndex,
       Actor.PLAYER
@@ -94,10 +120,7 @@ export default class GameLogic {
       this.holes[oppositeHoleIndex] = 0;
       this.warehouses[0] = this.warehouses[0] + seedsToMove;
     }
-    this.checkGameOver();
-    updateHoleAndWarehouseScores();
-    displayWarehouseSeeds();
-    displayHoleSeeds();
+    this.updateUI();
     displayMessage(0);
     if (
       this.gameStatus === GameStatus.WAITING_FOR_PLAYER &&
@@ -138,6 +161,7 @@ export default class GameLogic {
         console.log("AI: My chosen move was invalid. Stopping.");
         return;
       }
+      displayBorder(holeIndex);
       const { lastFilledHoleIndex, distributeHoleEvent } = this.distributeSeeds(
         holeIndex,
         Actor.OPPONENT
@@ -159,13 +183,9 @@ export default class GameLogic {
         this.holes[oppositeHoleIndex] = 0;
         this.warehouses[1] = this.warehouses[1] + seedsToMove;
       }
-      var selectedHole = document.getElementById(`hole-ui-${holeIndex}`);
-      displayBorder(selectedHole);
+      displayBorder(holeIndex);
       console.log(`AI: Finished my move on hole <${holeIndex}> 😎`);
-      this.checkGameOver();
-      updateHoleAndWarehouseScores();
-      displayWarehouseSeeds();
-      displayHoleSeeds();
+      this.updateUI();
       displayMessage(0);
       if (
         this.gameStatus === GameStatus.OPPONENT_WON ||
@@ -298,15 +318,64 @@ export default class GameLogic {
       return;
     }
   }
+
+  updateUI() {
+    this.checkGameOver();
+    updateHoleAndWarehouseScores();
+    displayWarehouseSeeds();
+    displayHoleSeeds();
+  }
+
+  // input: {gameStatus, playerWarehouse, playerHoles, opponentWarehouse, opponentHoles}
+  updateGameFromEvent(input) {
+    this.gameStatus = input.gameStatus;
+    if (this.gameStatus === GameStatus.WAITING_FOR_PLAYER) {
+      displayMessage(0);
+    } else if (this.gameStatus === GameStatus.WAITING_FOR_OPPONENT) {
+      displayMessage(1);
+    }
+    this.warehouses[0] = input.playerWarehouse;
+    this.warehouses[1] = input.opponentWarehouse;
+    for (let i = 0; i < this.opponentHolesIndex; i++) {
+      this.holes[i] = input.playerHoles[i];
+      const j = i + this.opponentHolesIndex;
+      this.holes[j] = input.opponentHoles[i];
+    }
+    this.updateUI();
+  }
+
+  updateWinner(gameStatus) {
+    this.gameStatus = gameStatus;
+    this.updateUI();
+  }
 }
 
 //Message-Panel
 export function displayMessage(turn) {
-  if (turn == 0) {
+  if (turn === 0) {
     document.getElementById("messagepanel").innerHTML = "Your turn.";
-  } else if (turn == 1) {
+  } else if (turn === 2) {
+    document.getElementById("messagepanel").innerHTML = "The other one's turn.";
+  } else if (turn === 1) {
     document.getElementById("messagepanel").innerHTML = "Game over.";
   } else {
-    document.getElementById("messagepanel").innerHTML = "The other one's turn.";
+    document.getElementById("messagepanel").innerHTML =
+      "Waiting for opponent to join.";
   }
+}
+
+//Border when selecting a hole
+export function displayBorder(holeIndex) {
+  let elem1 = document.getElementById(`hole-ui-${holeIndex}`);
+
+  elem1.setAttribute(
+    "style",
+    "  box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; border: 5px inset #ffffff;"
+  );
+  setTimeout(function () {
+    elem1.removeAttribute(
+      "style",
+      "box-sizing; -moz-box-sizing; -webkit-box-sizing; border;"
+    );
+  }, 2000);
 }

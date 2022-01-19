@@ -9,6 +9,8 @@ export class GameStatus {
   static DRAW = "DRAW";
   static WAITING_FOR_PLAYER = "WAITING_FOR_PLAYER";
   static WAITING_FOR_OPPONENT = "WAITING_FOR_OPPONENT";
+  static WAITING_FOR_SERVER = "WAITING_FOR_SERVER";
+  static SERVER_ERROR = "SERVER_ERROR";
 }
 
 export class Actor {

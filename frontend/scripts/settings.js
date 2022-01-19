@@ -1,5 +1,6 @@
 import { GameStatus, PlayStyle } from "./enums/enums.js";
 import GameLogic from "./game-logic.js";
+import { leave } from "./requests/requests.js";
 
 // constants for settings
 const minNumberOfHoles = 2;
@@ -16,6 +17,7 @@ let holeRowBottomElem = document.getElementById("hole-row-bottom");
 
 let startGameOverlayElem = document.getElementById("start-game-popup");
 let startGameButton = document.getElementById("start-game-button");
+let startMultiplayerGameButton = document.getElementById("multiplayer-button");
 let restartGameButton = document.getElementById("restart-game-button");
 let restartGameIcon = document.getElementById("restart-game-icon");
 
@@ -26,7 +28,7 @@ let warehouseScoreLeft = document.getElementById("warehouse-left");
 let warehouseScoreRight = document.getElementById("warehouse-right");
 
 //variables for Seed Settings
-export let numberOfSeeds = 5;
+let numberOfSeeds = 5;
 const minNumberOfSeeds = 1;
 const maxNumberOfSeeds = 15;
 let numberOfSeedsDisplayElem = document.querySelector(
@@ -40,6 +42,10 @@ let numberOfHoles = maxNumberOfHoles;
 
 // game variables
 let currentGame;
+
+export function getCurrentGame() {
+  return currentGame;
+}
 
 updateNumberOfHoles();
 updateNumberOfSeeds();
@@ -61,24 +67,56 @@ numberOfHolesMinusElem.addEventListener("click", () => {
 startGameButton.addEventListener("click", () => {
   startOrResetGame();
 });
+startMultiplayerGameButton.addEventListener("click", () => {
+  startOrResetGame(true);
+});
 restartGameButton.addEventListener("click", startOrResetGame);
-restartGameIcon.addEventListener("click", startOrResetGame);
+restartGameIcon.addEventListener(
+  "click",
+  async function () {
+    currentGame = getCurrentGame();
+    if (currentGame.playStyle === PlayStyle.OFFLINE) {
+      startOrResetGame();
+    } else {
+      //call leave
+      leave();
+    }
+  },
+  false
+);
 
 function updateNumberOfHoles() {
   numberOfHolesDisplayElem.innerHTML = numberOfHoles;
 }
 
-function startOrResetGame() {
+export function startOrResetGame(isMultiplayer) {
   startGameOverlayElem.setAttribute("style", "display: none;");
   // hide winner popup
   updateWinner(GameStatus.WAITING_FOR_PLAYER);
   // TODO integrate multiplayer option
 
   let checkbox = document.getElementById("checkbox");
-  if (checkbox.checked) {
-    currentGame = new GameLogic(PlayStyle.OFFLINE, 1, numberOfHoles);
+  if (isMultiplayer) {
+    currentGame = new GameLogic(
+      PlayStyle.ONLINE,
+      1,
+      numberOfHoles,
+      numberOfSeeds
+    );
+  } else if (checkbox.checked) {
+    currentGame = new GameLogic(
+      PlayStyle.OFFLINE,
+      1,
+      numberOfHoles,
+      numberOfSeeds
+    );
   } else {
-    currentGame = new GameLogic(PlayStyle.OFFLINE, 0, numberOfHoles);
+    currentGame = new GameLogic(
+      PlayStyle.OFFLINE,
+      0,
+      numberOfHoles,
+      numberOfSeeds
+    );
   }
 
   // set warehouse scores to 0
@@ -104,7 +142,6 @@ function startOrResetGame() {
     holeScoreDiv.id = `hole-score-${i}`;
     holeScoreDiv.innerHTML = currentGame.holes[i];
     holeUiDiv.addEventListener("click", () => {
-      displayBorder(holeUiDiv);
       currentGame.executePlayerMove(i);
       updateHoleAndWarehouseScores();
       displayWarehouseSeeds();
@@ -280,18 +317,4 @@ numberOfSeedsMinusElem.addEventListener("click", () => {
 
 function updateNumberOfSeeds() {
   numberOfSeedsDisplayElem.innerHTML = numberOfSeeds;
-}
-
-//Border when selecting a hole
-export function displayBorder(elem1) {
-  elem1.setAttribute(
-    "style",
-    "  box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; border: 5px inset #ffffff;"
-  );
-  setTimeout(function () {
-    elem1.removeAttribute(
-      "style",
-      "box-sizing; -moz-box-sizing; -webkit-box-sizing; border;"
-    );
-  }, 2000);
 }
