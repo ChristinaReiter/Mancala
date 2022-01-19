@@ -141,3 +141,35 @@ export async function notify(move) {
     console.error("Error notifying", error);
   }
 }
+
+export async function leave() {
+  const username = getUsername();
+  const password = getPassword();
+  const game = getGame();
+
+  try {
+    const response = await fetch(publicApi + "leave", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nick: username,
+        password,
+        game,
+      }),
+    });
+    if (response.status == 200) {
+      return JSON.parse(await response.text());
+    } else {
+      console.error(
+        "Leave responded with error",
+        response?.status,
+        response?.statusText
+      );
+      return false;
+    }
+  } catch (error) {
+    console.error("Error leaving", error);
+  }
+}

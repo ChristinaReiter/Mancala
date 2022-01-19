@@ -1,5 +1,6 @@
 import { GameStatus, PlayStyle } from "./enums/enums.js";
 import GameLogic from "./game-logic.js";
+import { leave } from "./requests/requests.js";
 
 // constants for settings
 const minNumberOfHoles = 2;
@@ -66,13 +67,25 @@ startGameButton.addEventListener("click", () => {
   startOrResetGame();
 });
 restartGameButton.addEventListener("click", startOrResetGame);
-restartGameIcon.addEventListener("click", startOrResetGame);
+restartGameIcon.addEventListener(
+  "click",
+  async function () {
+    currentGame = getCurrentGame();
+    if (this.playStyle === PlayStyle.OFFLINE) {
+      startOrResetGame;
+    } else {
+      //call leave
+      leave();
+    }
+  },
+  false
+);
 
 function updateNumberOfHoles() {
   numberOfHolesDisplayElem.innerHTML = numberOfHoles;
 }
 
-function startOrResetGame() {
+export function startOrResetGame() {
   startGameOverlayElem.setAttribute("style", "display: none;");
   // hide winner popup
   updateWinner(GameStatus.WAITING_FOR_PLAYER);
@@ -108,7 +121,6 @@ function startOrResetGame() {
     holeScoreDiv.id = `hole-score-${i}`;
     holeScoreDiv.innerHTML = currentGame.holes[i];
     holeUiDiv.addEventListener("click", () => {
-      displayBorder(holeUiDiv);
       currentGame.executePlayerMove(i);
       updateHoleAndWarehouseScores();
       displayWarehouseSeeds();
@@ -284,18 +296,4 @@ numberOfSeedsMinusElem.addEventListener("click", () => {
 
 function updateNumberOfSeeds() {
   numberOfSeedsDisplayElem.innerHTML = numberOfSeeds;
-}
-
-//Border when selecting a hole
-export function displayBorder(elem1) {
-  elem1.setAttribute(
-    "style",
-    "  box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; border: 5px inset #ffffff;"
-  );
-  setTimeout(function () {
-    elem1.removeAttribute(
-      "style",
-      "box-sizing; -moz-box-sizing; -webkit-box-sizing; border;"
-    );
-  }, 2000);
 }

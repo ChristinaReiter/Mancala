@@ -95,6 +95,7 @@ export default class GameLogic {
     }
     console.log(`Player: Making a move on hole <${holeIndex}>`);
     if (this.playStyle === PlayStyle.ONLINE) {
+      displayBorder(holeIndex);
       notify(holeIndex);
       return;
     }
@@ -161,6 +162,7 @@ export default class GameLogic {
         console.log("AI: My chosen move was invalid. Stopping.");
         return;
       }
+      displayBorder(holeIndex);
       const { lastFilledHoleIndex, distributeHoleEvent } = this.distributeSeeds(
         holeIndex,
         Actor.OPPONENT
@@ -182,8 +184,7 @@ export default class GameLogic {
         this.holes[oppositeHoleIndex] = 0;
         this.warehouses[1] = this.warehouses[1] + seedsToMove;
       }
-      var selectedHole = document.getElementById(`hole-ui-${holeIndex}`);
-      displayBorder(selectedHole);
+      displayBorder(holeIndex);
       console.log(`AI: Finished my move on hole <${holeIndex}> 😎`);
       this.updateUI();
       displayMessage(0);
@@ -363,4 +364,20 @@ export function displayMessage(turn) {
     document.getElementById("messagepanel").innerHTML =
       "Waiting for opponent to join.";
   }
+}
+
+//Border when selecting a hole
+export function displayBorder(holeIndex) {
+  let elem1 = document.getElementById(`hole-ui-${holeIndex}`);
+
+  elem1.setAttribute(
+    "style",
+    "  box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; border: 5px inset #ffffff;"
+  );
+  setTimeout(function () {
+    elem1.removeAttribute(
+      "style",
+      "box-sizing; -moz-box-sizing; -webkit-box-sizing; border;"
+    );
+  }, 2000);
 }
