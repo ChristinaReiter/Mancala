@@ -17,6 +17,7 @@ let holeRowBottomElem = document.getElementById("hole-row-bottom");
 
 let startGameOverlayElem = document.getElementById("start-game-popup");
 let startGameButton = document.getElementById("start-game-button");
+let startMultiplayerGameButton = document.getElementById("multiplayer-button");
 let restartGameButton = document.getElementById("restart-game-button");
 let restartGameIcon = document.getElementById("restart-game-icon");
 
@@ -66,13 +67,16 @@ numberOfHolesMinusElem.addEventListener("click", () => {
 startGameButton.addEventListener("click", () => {
   startOrResetGame();
 });
+startMultiplayerGameButton.addEventListener("click", () => {
+  startOrResetGame(true);
+});
 restartGameButton.addEventListener("click", startOrResetGame);
 restartGameIcon.addEventListener(
   "click",
   async function () {
     currentGame = getCurrentGame();
-    if (this.playStyle === PlayStyle.OFFLINE) {
-      startOrResetGame;
+    if (currentGame.playStyle === PlayStyle.OFFLINE) {
+      startOrResetGame();
     } else {
       //call leave
       leave();
@@ -85,17 +89,34 @@ function updateNumberOfHoles() {
   numberOfHolesDisplayElem.innerHTML = numberOfHoles;
 }
 
-export function startOrResetGame() {
+export function startOrResetGame(isMultiplayer) {
   startGameOverlayElem.setAttribute("style", "display: none;");
   // hide winner popup
   updateWinner(GameStatus.WAITING_FOR_PLAYER);
   // TODO integrate multiplayer option
 
   let checkbox = document.getElementById("checkbox");
-  if (checkbox.checked) {
-    currentGame = new GameLogic(PlayStyle.OFFLINE, 1, numberOfHoles, numberOfSeeds);
+  if (isMultiplayer) {
+    currentGame = new GameLogic(
+      PlayStyle.ONLINE,
+      1,
+      numberOfHoles,
+      numberOfSeeds
+    );
+  } else if (checkbox.checked) {
+    currentGame = new GameLogic(
+      PlayStyle.OFFLINE,
+      1,
+      numberOfHoles,
+      numberOfSeeds
+    );
   } else {
-    currentGame = new GameLogic(PlayStyle.OFFLINE, 0, numberOfHoles, numberOfSeeds);
+    currentGame = new GameLogic(
+      PlayStyle.OFFLINE,
+      0,
+      numberOfHoles,
+      numberOfSeeds
+    );
   }
 
   // set warehouse scores to 0

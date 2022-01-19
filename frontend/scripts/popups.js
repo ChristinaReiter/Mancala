@@ -73,7 +73,7 @@ loginbutton.addEventListener(
     let passwordvalue = password.value;
     if (usernamevalue == "" || passwordvalue == "") {
       errorText.innerHTML = "Invalid input.";
-    } else if (Boolean(registerUser(usernamevalue, passwordvalue)) == true) {
+    } else if (Boolean(registerUserPublic(usernamevalue, passwordvalue)) == true) {
       loginDisplay.setAttribute("style", "display: none;");
       document
         .getElementById("start-game-popup")

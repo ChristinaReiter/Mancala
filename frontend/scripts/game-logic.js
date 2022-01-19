@@ -3,7 +3,6 @@ import {
   updateWinner,
   displayHoleSeeds,
   displayWarehouseSeeds,
-  displayBorder,
 } from "./settings.js";
 import {
   isPlayerMoveValid,
@@ -57,7 +56,7 @@ export default class GameLogic {
     this.warehouses = new Array(2).fill(0);
     this.playerStartIndex = playerStartIndex;
     if (playStyle === PlayStyle.ONLINE) {
-      displayMessage(2);
+      displayMessage(3);
       this.initOnlineGame();
     }
     this.gameStatus =
@@ -355,11 +354,10 @@ export default class GameLogic {
 export function displayMessage(turn) {
   if (turn === 0) {
     document.getElementById("messagepanel").innerHTML = "Your turn.";
-  } else if (turn == 1) {
-    document.getElementById("messagepanel").innerHTML = "Game over.";
-  // TODO fix this, which === 1 is true
-  } else if (turn === 1) {
+  } else if (turn === 2) {
     document.getElementById("messagepanel").innerHTML = "The other one's turn.";
+  } else if (turn === 1) {
+    document.getElementById("messagepanel").innerHTML = "Game over.";
   } else {
     document.getElementById("messagepanel").innerHTML =
       "Waiting for opponent to join.";
