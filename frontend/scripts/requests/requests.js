@@ -109,7 +109,7 @@ export async function join(input) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        group: 2002,
+        group: 2,
         nick: username,
         password: password,
         size: input.size,
@@ -184,11 +184,6 @@ export async function leave() {
     if (response.status == 200) {
       return JSON.parse(await response.text());
     } else {
-      console.error(
-        "Leave responded with error",
-        response?.status,
-        response?.statusText
-      );
       return false;
     }
   } catch (error) {
