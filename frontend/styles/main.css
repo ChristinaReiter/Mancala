@@ -40,3 +40,14 @@ h1 {
   margin-top: 40px;
   text-align: center;
 }
+
+button {
+  background-color: #3f4edb !important;
+  border-color: #1a2162 !important;
+  color: #fff !important;
+  font-size: 20px;
+  min-width: 102px;
+  min-height: 35px;
+  border-radius: 5px;
+  cursor: pointer;
+}
