@@ -87,7 +87,7 @@ export async function join(input) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        group: 1337,
+        group: 2,
         nick: username,
         password: password,
         size: input.size,

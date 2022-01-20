@@ -78,6 +78,14 @@ export default class GameLogic {
     this.eventSource = createEventSource(nick, gameId);
   }
 
+  closeEventSource() {
+    if (this.playStyle === PlayStyle.ONLINE && this.eventSource) {
+      try {
+        this.eventSource.close();
+      } catch (error) {}
+    }
+  }
+
   executePlayerMove(holeIndex) {
     if (
       !isPlayerMoveValid(
@@ -254,6 +262,11 @@ export default class GameLogic {
   }
 
   checkGameOver() {
+    // timeout during pairing
+    if (this.gameStatus === GameStatus.PAIRING_TIMEOUT) {
+      updateWinner(this.gameStatus);
+      return;
+    }
     // player has enough seeds in his / her warehouse
     if (this.warehouses[0] >= this.seedsToWin) {
       this.gameStatus = GameStatus.PLAYER_WON;
@@ -344,7 +357,7 @@ export default class GameLogic {
     this.updateUI();
   }
 
-  updateWinner(gameStatus) {
+  updateWinnerFromEvent(gameStatus) {
     this.gameStatus = gameStatus;
     this.updateUI();
   }

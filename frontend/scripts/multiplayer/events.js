@@ -13,21 +13,24 @@ export function createEventSource(nick, game) {
     console.log(eventInput);
     const event = JSON.parse(eventInput.data);
     const currentGame = getCurrentGame();
-    if (event.board) {
+    if ("board" in event) {
       const result = parseBoardEvent(event);
       currentGame?.updateGameFromEvent(result);
-    } else if (event.winner) {
-      const result = parseWinnerEvent(event);
-      currentGame?.updateWinner(result);
+    } else if ("winner" in event) {
+      const result = parseWinnerEvent(event, currentGame);
+      currentGame?.updateWinnerFromEvent(result);
     }
   };
   source.onerror = (error) => console.error("error", error);
   return source;
 }
 
-function parseWinnerEvent(event) {
+function parseWinnerEvent(event, currentGame) {
   const username = getUsername();
-  let gameStatus =
+  if (currentGame.gameStatus === GameStatus.WAITING_FOR_SERVER) {
+    return GameStatus.PAIRING_TIMEOUT;
+  }
+  const gameStatus =
     event.winner === username
       ? GameStatus.PLAYER_WON
       : event.winner === null
@@ -39,8 +42,6 @@ function parseWinnerEvent(event) {
 function parseBoardEvent(event) {
   const username = getUsername();
   let gameStatus;
-  // TODO check that every object that needs to be there exists
-  // if not set gameStatus to server error
   gameStatus =
     event.board?.turn === username
       ? GameStatus.WAITING_FOR_PLAYER
@@ -59,11 +60,6 @@ function parseBoardEvent(event) {
       opponentHoles = value.pits;
     }
   }
-  console.log("gameStatus", gameStatus);
-  console.log("playerWarehouse", playerWarehouse);
-  console.log("playerHoles", playerHoles);
-  console.log("opponentWarehouse", opponentWarehouse);
-  console.log("opponentHoles", opponentHoles);
   return {
     gameStatus,
     playerWarehouse,
@@ -72,19 +68,3 @@ function parseBoardEvent(event) {
     opponentHoles,
   };
 }
-
-// TODO remove later
-const boardExample = {
-  board: {
-    turn: "moritz",
-    sides: {
-      moritz: { store: 0, pits: [5, 5, 5, 5] },
-      alex: { store: 0, pits: [5, 5, 5, 5] },
-    },
-  },
-  stores: { moritz: 0, alex: 0 },
-};
-
-const winnerExample = {
-  winner: "alex",
-};
