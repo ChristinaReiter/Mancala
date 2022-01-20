@@ -121,7 +121,6 @@ export default class GameLogic {
       this.warehouses[0] = this.warehouses[0] + seedsToMove;
     }
     this.updateUI();
-    displayMessage(0);
     if (
       this.gameStatus === GameStatus.WAITING_FOR_PLAYER &&
       distributeHoleEvent !== DistributeHoleEvent.IN_OWN_WAREHOUSE
@@ -332,7 +331,7 @@ export default class GameLogic {
     if (this.gameStatus === GameStatus.WAITING_FOR_PLAYER) {
       displayMessage(0);
     } else if (this.gameStatus === GameStatus.WAITING_FOR_OPPONENT) {
-      displayMessage(1);
+      displayMessage(2);
     }
     this.warehouses[0] = input.playerWarehouse;
     this.warehouses[1] = input.opponentWarehouse;
