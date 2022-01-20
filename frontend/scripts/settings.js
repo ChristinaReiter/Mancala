@@ -70,16 +70,43 @@ startGameButton.addEventListener("click", () => {
 startMultiplayerGameButton.addEventListener("click", () => {
   startOrResetGame(true);
 });
-restartGameButton.addEventListener("click", startOrResetGame);
+restartGameButton.addEventListener(
+  "click",
+  async function () {
+    currentGame = getCurrentGame();
+    if (currentGame.playStyle === PlayStyle.OFFLINE) {
+      winnerElem.setAttribute("style", "display: none");
+      startGameOverlayElem.setAttribute(
+        "style",
+        "display: list-item; z-index: 10;"
+      );
+    } else {
+      //call leave
+      leave();
+      winnerElem.setAttribute("style", "display: none");
+      startGameOverlayElem.setAttribute(
+        "style",
+        "display: list-item; z-index: 10;"
+      );
+    }
+  },
+  false
+);
+
 restartGameIcon.addEventListener(
   "click",
   async function () {
     currentGame = getCurrentGame();
     if (currentGame.playStyle === PlayStyle.OFFLINE) {
-      startOrResetGame();
+      winnerElem.setAttribute("style", "display: none");
+      startGameOverlayElem.setAttribute(
+        "style",
+        "display: list-item; z-index: 10;"
+      );
     } else {
       //call leave
       leave();
+      winnerElem.setAttribute("style", "display: none");
     }
   },
   false

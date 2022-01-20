@@ -129,7 +129,6 @@ export default class GameLogic {
       this.warehouses[0] = this.warehouses[0] + seedsToMove;
     }
     this.updateUI();
-    displayMessage(0);
     if (
       this.gameStatus === GameStatus.WAITING_FOR_PLAYER &&
       distributeHoleEvent !== DistributeHoleEvent.IN_OWN_WAREHOUSE
@@ -148,6 +147,7 @@ export default class GameLogic {
         opponentHolesIndex: this.opponentHolesIndex,
         holes: this.holes,
       });
+      displayBorder(holeIndex);
       if (holeIndex === null) {
         console.log("AI: Sorry I can't do anything here :(");
         return;
@@ -169,7 +169,6 @@ export default class GameLogic {
         console.log("AI: My chosen move was invalid. Stopping.");
         return;
       }
-      displayBorder(holeIndex);
       const { lastFilledHoleIndex, distributeHoleEvent } = this.distributeSeeds(
         holeIndex,
         Actor.OPPONENT
@@ -345,7 +344,7 @@ export default class GameLogic {
     if (this.gameStatus === GameStatus.WAITING_FOR_PLAYER) {
       displayMessage(0);
     } else if (this.gameStatus === GameStatus.WAITING_FOR_OPPONENT) {
-      displayMessage(1);
+      displayMessage(2);
     }
     this.warehouses[0] = input.playerWarehouse;
     this.warehouses[1] = input.opponentWarehouse;
