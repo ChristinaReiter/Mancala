@@ -1,10 +1,10 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
-const requests = require("./backend/requests.js");
-require("./backend/database.js");
+const requests = require("./server/backend/requests.js");
+require("./server/backend/database.js");
 
-const frontendFolder = "frontend/";
+const frontendFolder = "server/frontend/";
 
 http
   .createServer(function (req, res) {
@@ -29,7 +29,7 @@ http
       // serve main html on /
     } else if (req.url === "/") {
       fs.readFile(
-        path.join(__dirname, "../index.html"),
+        path.join(__dirname, "./index.html"),
         "UTF-8",
         function (err, html) {
           res.writeHead(200, { "Content-Type": "text/html" });
