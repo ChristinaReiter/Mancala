@@ -1,3 +1,4 @@
+import { GROUP_NUMBER } from "./config.js";
 import {
   getGame,
   getPassword,
@@ -109,7 +110,7 @@ export async function join(input) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        group: 2,
+        group: GROUP_NUMBER,
         nick: username,
         password: password,
         size: input.size,

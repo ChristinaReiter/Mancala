@@ -68,6 +68,10 @@ Handles multiplayer credentials and server events
 
 Provides functions to call the backend services
 
+### Frontend/scripts/requests/config.js
+
+Declares the group number used for the multiplayer
+
 ### Frontend/scripts/game-logic.js
 
 Manages the Mancala game logic
