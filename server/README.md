@@ -18,9 +18,9 @@
 
 Main html file
 
-# Server
+# Index.js
 
-Application code
+Main javascript file
 
 ## Backend/
 
