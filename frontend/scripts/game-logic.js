@@ -139,6 +139,7 @@ export default class GameLogic {
         opponentHolesIndex: this.opponentHolesIndex,
         holes: this.holes,
       });
+      displayBorder(holeIndex);
       if (holeIndex === null) {
         console.log("AI: Sorry I can't do anything here :(");
         return;
@@ -160,7 +161,6 @@ export default class GameLogic {
         console.log("AI: My chosen move was invalid. Stopping.");
         return;
       }
-      displayBorder(holeIndex);
       const { lastFilledHoleIndex, distributeHoleEvent } = this.distributeSeeds(
         holeIndex,
         Actor.OPPONENT
