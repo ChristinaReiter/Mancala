@@ -17,7 +17,7 @@ const frontendMultiplayerFolderName = path.join(
   "/frontend/scripts/multiplayer"
 );
 const styleFolderName = path.join(__dirname, "/frontend/styles");
-const htmlFileName = path.join(__dirname, "/frontend/main.html");
+const htmlFileName = path.join(__dirname, "/index.html");
 
 // watch the target files and folders
 const backendWatcher = fs.watch(backendFolderName);

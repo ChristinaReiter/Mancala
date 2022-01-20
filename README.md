@@ -14,6 +14,14 @@
 
 # File Structure & Overview
 
+# index.js
+
+Main javascript file
+
+# index.html
+
+Main html file
+
 ## Backend/
 
 Contains all backend routes as well as storage
@@ -35,10 +43,6 @@ Hashes an input string value
 Handles the backend routes /ranking and /register
 
 # Frontend
-
-## Frontend/main.html
-
-Contains the application's html file
 
 ## Frontend/assets/
 
