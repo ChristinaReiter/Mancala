@@ -141,7 +141,6 @@ export default class GameLogic {
   async executeAiMove() {
     displayMessage(2);
     console.log("AI: Thinking about my next move");
-    // TODO use better AI function
     setTimeout(() => {
       let holeIndex = findBestAiMove({
         opponentHolesIndex: this.opponentHolesIndex,

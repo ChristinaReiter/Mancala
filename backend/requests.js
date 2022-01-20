@@ -13,7 +13,6 @@ module.exports.handleBackendRequest = (req, res) => {
 
 async function handleRegisterUser(req, res) {
   const data = await parseData(req);
-  // TODO check for request type and correct parameters and return 400 if argument is missing
   if (
     !checkParameterExists(data, "username", "string") ||
     !checkParameterExists(data, "password", "string")

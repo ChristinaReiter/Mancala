@@ -120,7 +120,6 @@ export function startOrResetGame(isMultiplayer) {
   startGameOverlayElem.setAttribute("style", "display: none;");
   // hide winner popup
   updateWinner(GameStatus.WAITING_FOR_PLAYER);
-  // TODO integrate multiplayer option
 
   let checkbox = document.getElementById("checkbox");
   if (isMultiplayer) {
