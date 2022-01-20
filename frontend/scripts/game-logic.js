@@ -87,6 +87,7 @@ export default class GameLogic {
   }
 
   executePlayerMove(holeIndex) {
+    displayMessage(0);
     if (
       !isPlayerMoveValid(
         holeIndex,
@@ -101,6 +102,7 @@ export default class GameLogic {
       return;
     }
     console.log(`Player: Making a move on hole <${holeIndex}>`);
+    displayBorder(holeIndex);
     if (this.playStyle === PlayStyle.ONLINE) {
       displayBorder(holeIndex);
       notify(holeIndex);
