@@ -96,7 +96,6 @@ export default class GameLogic {
   }
 
   executePlayerMove(holeIndex) {
-    displayMessage("Your turn.");
     if (
       !isPlayerMoveValid(
         holeIndex,
