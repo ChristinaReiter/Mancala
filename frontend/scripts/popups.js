@@ -102,6 +102,10 @@ rankingicon.addEventListener(
     let result = await getRankingPublic();
     let resultJSON = JSON.parse(result);
     let ranking = resultJSON.ranking;
+    // order ranking by victories descending
+    ranking = ranking.sort((a, b) =>
+      a.victories > b.victories ? -1 : b.victories > a.victories ? 1 : 0
+    );
     if (ranking.length > 10) ranking = ranking.slice(0, 10);
     let rankingELem = document.getElementById("ranking");
     rankingELem.innerHTML = "";
