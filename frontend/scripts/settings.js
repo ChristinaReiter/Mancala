@@ -245,7 +245,7 @@ export function updateWinner(gameStatus) {
     winnerTextElem.innerText = "DRAW!";
   } else if (gameStatus === GameStatus.PAIRING_TIMEOUT) {
     winnerElem.setAttribute("style", "display: block; z-index: 10;");
-    winnerTextElem.innerText = "Timeout waiting for opponent to join!";
+    winnerTextElem.innerText = "No game found!";
   } else {
     winnerElem.setAttribute("style", "display: none;");
     return;
