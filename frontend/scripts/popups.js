@@ -3,7 +3,7 @@ import {
   setUsername,
   setPassword,
 } from "./multiplayer/credentials.js";
-import { registerUserPublic, getRanking } from "./requests/requests.js";
+import { registerUserPublic, getRankingPublic } from "./requests/requests.js";
 
 // Rules Popup
 let rulesDisplay = document.querySelector(".rules-overlay");
@@ -73,7 +73,9 @@ loginbutton.addEventListener(
     let passwordvalue = password.value;
     if (usernamevalue == "" || passwordvalue == "") {
       errorText.innerHTML = "Invalid input.";
-    } else if (Boolean(registerUserPublic(usernamevalue, passwordvalue)) == true) {
+    } else if (
+      Boolean(registerUserPublic(usernamevalue, passwordvalue)) == true
+    ) {
       loginDisplay.setAttribute("style", "display: none;");
       document
         .getElementById("start-game-popup")
@@ -97,7 +99,7 @@ rankingicon.addEventListener(
   "click",
   async function () {
     rankingDisplay.setAttribute("style", "display: list-item; z-index: 10;");
-    let result = await getRanking();
+    let result = await getRankingPublic();
     let resultJSON = JSON.parse(result);
     let ranking = resultJSON.ranking;
     if (ranking.length > 10) ranking = ranking.slice(0, 10);
