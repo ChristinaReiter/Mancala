@@ -65,6 +65,15 @@ export default class GameLogic {
         : playerStartIndex === 0
         ? GameStatus.WAITING_FOR_PLAYER
         : GameStatus.WAITING_FOR_OPPONENT;
+    if (playStyle === PlayStyle.OFFLINE) {
+      if (this.gameStatus === GameStatus.WAITING_FOR_OPPONENT) {
+        displayMessage("The other one's turn.");
+      } else if (this.gameStatus === GameStatus.WAITING_FOR_PLAYER) {
+        displayMessage("Your turn.");
+      } else if (this.gameStatus === GameStatus.WAITING_FOR_SERVER) {
+        displayMessage("Waiting ...");
+      }
+    }
   }
 
   async initOnlineGame() {
