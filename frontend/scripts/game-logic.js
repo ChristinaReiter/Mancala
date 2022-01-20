@@ -56,7 +56,7 @@ export default class GameLogic {
     this.warehouses = new Array(2).fill(0);
     this.playerStartIndex = playerStartIndex;
     if (playStyle === PlayStyle.ONLINE) {
-      displayMessage(3);
+      displayMessage("Waiting for opponent to join.");
       this.initOnlineGame();
     }
     this.gameStatus =
@@ -87,7 +87,7 @@ export default class GameLogic {
   }
 
   executePlayerMove(holeIndex) {
-    displayMessage(0);
+    displayMessage("Your turn.");
     if (
       !isPlayerMoveValid(
         holeIndex,
@@ -141,7 +141,7 @@ export default class GameLogic {
   }
 
   async executeAiMove() {
-    displayMessage(2);
+    displayMessage("The other one's turn.");
     console.log("AI: Thinking about my next move");
     setTimeout(() => {
       let holeIndex = findBestAiMove({
@@ -194,13 +194,13 @@ export default class GameLogic {
       displayBorder(holeIndex);
       console.log(`AI: Finished my move on hole <${holeIndex}> 😎`);
       this.updateUI();
-      displayMessage(0);
+      displayMessage("Your turn.");
       if (
         this.gameStatus === GameStatus.OPPONENT_WON ||
         this.gameStatus === GameStatus.PLAYER_WON
       ) {
         console.log(`Gamemaster: We have a winner: <${this.gameStatus}>`);
-        displayMessage(1);
+        displayMessage("Game over.");
         return;
       }
       if (distributeHoleEvent !== DistributeHoleEvent.IN_OWN_WAREHOUSE) {
@@ -267,7 +267,7 @@ export default class GameLogic {
     // player has enough seeds in his / her warehouse
     if (this.warehouses[0] >= this.seedsToWin) {
       this.gameStatus = GameStatus.PLAYER_WON;
-      displayMessage(1);
+      displayMessage("Game over.");
       console.log(
         "Gamemaster: Game is over because player has enough seeds to win."
       );
@@ -275,7 +275,7 @@ export default class GameLogic {
     }
     if (this.warehouses[1] >= this.seedsToWin) {
       this.gameStatus = GameStatus.OPPONENT_WON;
-      displayMessage(1);
+      displayMessage("Game over.");
       console.log(
         "Gamemaster: Game is over because opponent has enough seeds to win."
       );
@@ -311,7 +311,7 @@ export default class GameLogic {
       console.log(
         "Gamemaster: Game is over because player/opponent has 0 seeds in his holes."
       );
-      displayMessage(1);
+      displayMessage("Game over.");
       this.gameStatus =
         this.warehouses[0] > this.warehouses[1]
           ? GameStatus.PLAYER_WON
@@ -340,9 +340,9 @@ export default class GameLogic {
   updateGameFromEvent(input) {
     this.gameStatus = input.gameStatus;
     if (this.gameStatus === GameStatus.WAITING_FOR_PLAYER) {
-      displayMessage(0);
+      displayMessage("Your turn.");
     } else if (this.gameStatus === GameStatus.WAITING_FOR_OPPONENT) {
-      displayMessage(2);
+      displayMessage("The other one's turn.");
     }
     this.warehouses[0] = input.playerWarehouse;
     this.warehouses[1] = input.opponentWarehouse;
@@ -361,17 +361,8 @@ export default class GameLogic {
 }
 
 //Message-Panel
-export function displayMessage(turn) {
-  if (turn === 0) {
-    document.getElementById("messagepanel").innerHTML = "Your turn.";
-  } else if (turn === 2) {
-    document.getElementById("messagepanel").innerHTML = "The other one's turn.";
-  } else if (turn === 1) {
-    document.getElementById("messagepanel").innerHTML = "Game over.";
-  } else {
-    document.getElementById("messagepanel").innerHTML =
-      "Waiting for opponent to join.";
-  }
+export function displayMessage(text) {
+  document.getElementById("messagepanel").innerHTML = text;
 }
 
 //Border when selecting a hole
