@@ -217,9 +217,14 @@ export function updateWinner(gameStatus) {
   } else if (gameStatus === GameStatus.DRAW) {
     winnerElem.setAttribute("style", "display: block; z-index: 10;");
     winnerTextElem.innerText = "DRAW!";
+  } else if (gameStatus === GameStatus.PAIRING_TIMEOUT) {
+    winnerElem.setAttribute("style", "display: block; z-index: 10;");
+    winnerTextElem.innerText = "Timeout waiting for opponent to join!";
   } else {
     winnerElem.setAttribute("style", "display: none;");
+    return;
   }
+  currentGame.closeEventSource();
 }
 
 export function displayWarehouseSeeds() {
