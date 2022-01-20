@@ -240,7 +240,6 @@ export default class GameLogic {
       mergedArray[targetHoleIndex] = mergedArray[targetHoleIndex] + 1;
     }
     const lastFilledHoleIndex = (holeIndex + holeValue) % mergedArray.length;
-    console.log("emptyHole returning", lastFilledHoleIndex);
     const { updatedHoles, updatedWarehouse } = divideMergedArray({
       mergedArray,
       actor,
@@ -256,8 +255,6 @@ export default class GameLogic {
     if (lastFilledHoleIndex === actorWarehouseIndex) {
       distributeHoleEvent = DistributeHoleEvent.IN_OWN_WAREHOUSE;
     }
-    console.log("holes", this.holes);
-    console.log("warehouses", this.warehouses);
     return { lastFilledHoleIndex, distributeHoleEvent };
   }
 

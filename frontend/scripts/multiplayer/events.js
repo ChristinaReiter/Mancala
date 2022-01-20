@@ -10,7 +10,6 @@ export function createEventSource(nick, game) {
   const url = generateUrl(nick, game);
   const source = new EventSource(url);
   source.onmessage = (eventInput) => {
-    console.log(eventInput);
     const event = JSON.parse(eventInput.data);
     const currentGame = getCurrentGame();
     if ("board" in event) {

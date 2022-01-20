@@ -7,12 +7,10 @@ import {
 const publicApi = "http://twserver.alunos.dcc.fc.up.pt:8008/";
 
 export async function getRanking() {
-  console.log("getRanking is called");
   try {
     const response = await fetch("/ranking");
     if (response.status == 200) {
       const result = await response.text();
-      console.log("ranking result", result);
       return result;
     } else {
       console.error(
@@ -27,7 +25,6 @@ export async function getRanking() {
 }
 
 export async function getRankingPublic() {
-  console.log("getRanking is called");
   try {
     const response = await fetch(publicApi + "ranking", {
       method: "POST",
@@ -38,7 +35,6 @@ export async function getRankingPublic() {
     });
     if (response.status == 200) {
       const result = await response.text();
-      console.log("ranking result", result);
       return result;
     } else {
       console.error(
@@ -113,7 +109,7 @@ export async function join(input) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        group: 2,
+        group: 2002,
         nick: username,
         password: password,
         size: input.size,
