@@ -6,7 +6,7 @@ require("./backend/database.js");
 
 const frontendFolder = "frontend/";
 
-const httpServer = http
+http
   .createServer(function (req, res) {
     // serve .css files
     if (req.url.match(".css$")) {
@@ -28,10 +28,14 @@ const httpServer = http
       fileStream.pipe(res);
       // serve main html on /
     } else if (req.url === "/") {
-      fs.readFile("./index.html", "UTF-8", function (err, html) {
-        res.writeHead(200, { "Content-Type": "text/html" });
-        res.end(html);
-      });
+      fs.readFile(
+        path.join(__dirname, "../index.html"),
+        "UTF-8",
+        function (err, html) {
+          res.writeHead(200, { "Content-Type": "text/html" });
+          res.end(html);
+        }
+      );
       // handle all other requests with backend
     } else {
       requests.handleBackendRequest(req, res);

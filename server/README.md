@@ -14,13 +14,13 @@
 
 # File Structure & Overview
 
-# index.js
-
-Main javascript file
-
 # index.html
 
 Main html file
+
+# Server
+
+Application code
 
 ## Backend/
 
